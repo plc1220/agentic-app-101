@@ -1,66 +1,155 @@
 # Agentic App 101
 
-A beginner-friendly full-day workshop (09:00–17:00) and a tiny runnable Gemini agent. Attendees can take this folder home and run the example later; nobody needs to install software or run code during the workshop.
+A full-day workshop and a runnable **document chat agent** built with **React, FastAPI, Deep Agents and Gemini**.
 
-## Start here
+Ask questions about three fictional regional reports, watch tool activity, and generate a downloadable briefing. The app includes streamed responses, saved conversations, document upload, Markdown previews, cancellation and reconnect support.
 
-1. Install Python 3.10 or newer and get the repository folder (ZIP/copy, or clone after a public URL is available). Git is optional when using a ZIP.
-2. Get a Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey). The Gemini API has a free tier for selected models, subject to current model availability and project quotas. Free-tier usage has data-use terms that differ from paid use; do not enter confidential or personal data.
-3. Copy `.env.example` to `.env` and paste the API key after `GEMINI_API_KEY=`.
-4. Run `run.bat` in Windows Command Prompt (`.\run.bat` in PowerShell), or `bash run.sh` on macOS/Linux. The launcher creates `.venv` and installs the Python packages automatically.
-5. Ask: `When is the backend session?` or `What happens in the demo?` Type `quit` to exit.
+## Quick start — Python only
 
-There is no manual virtual-environment activation or cloud CLI setup. Internet access, a valid API key and model quota are required. See `stack-and-setup.md` for platform instructions and common setup issues. The repository is currently local with no public clone URL.
+Install **Python 3.11+**. Clone with Git, or [download the ZIP](https://github.com/plc1220/agentic-app-101/archive/refs/heads/main.zip) and extract it:
 
-The example is intentionally small: Gemini answers questions and can call one safe Python function that looks up a fixed workshop schedule. The terminal prints when the function is used. No database, cloud storage, Docker, or framework setup is required.
+```bash
+git clone https://github.com/plc1220/agentic-app-101.git
+cd agentic-app-101
+cp .env.example .env
+```
 
-## Your Google Cloud project
+On Windows, use `copy .env.example .env` in Command Prompt, or `Copy-Item .env.example .env` in PowerShell.
 
-The easiest route is the Gemini Developer API key from Google AI Studio. The key is associated with a Google Cloud project; if you have access to `my-rd-coe-demo-gen-ai`, select or import that project when creating the key. The script reads `GEMINI_API_KEY`; it does not need the project ID as a separate setting.
+Edit `.env`:
 
-This example does not use Vertex AI. Using Vertex AI with that project is a different configuration and may require enabling services, credentials, and billing. A project ID by itself is not an API credential.
+```dotenv
+GEMINI_API_KEY=your_key_from_google_ai_studio
+GEMINI_MODEL=gemini-3-flash-preview
+AGENT_MODE=gemini
+```
 
-Free-tier access, available models, data handling, and quotas can change. Check Google's current [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [billing and tiers](https://ai.google.dev/gemini-api/docs/billing), and [rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) before the workshop.
+Get a key from [Google AI Studio](https://aistudio.google.com/apikey). Use a model available to your project. Selected models offer a free tier, subject to project tier and quota; see [pricing](https://ai.google.dev/gemini-api/docs/pricing). Use the included fictional data when learning.
 
-## What the code demonstrates
+Start the app:
 
-- The attendee enters a normal-language question.
-- Gemini can decide to call `find_workshop_session`.
-- Python runs that specific function and returns its result to Gemini.
-- Gemini turns the result into a short answer.
+| Platform | Command |
+|---|---|
+| macOS / Linux | `bash run.sh` |
+| Windows Command Prompt | `run.bat` |
+| Windows PowerShell | `.\run.bat` |
 
-This is tool calling: the model chooses whether a capability should be used, while the app owns and runs the capability. The function only reads fixed sample data; it cannot execute arbitrary commands or access files.
+Open **http://127.0.0.1:8000**. Stop the server with Ctrl+C.
 
-## Files
+The launcher creates `.venv`, installs the Python packages, and starts the backend. A prebuilt React frontend is included, so **Node.js, Docker and database installation are not required for this path**. Internet access is needed for dependency installation and Gemini requests. No cloud CLI login or service-account file is needed.
 
-- `agentic-app-101.html` — workshop slide deck. Use left/right arrow keys; `N` opens presenter notes, `O` opens the slide overview, and `F` toggles fullscreen. The illustrated deck works offline without external fonts or images.
-- `run_agent.py` — small Gemini tool-calling example.
-- `run.sh` / `run.bat` — install dependencies and start the program.
-- `facilitator-runbook.md` — full-day agenda, exact slide timings, and speaker notes.
-- `slide-outline.md` — all slides, modules, and planned durations.
-- `demo-walkthrough.md` — presenter walkthrough of the actual starter and backup plan.
-- `typical-app-scaffold.md` — a reference project tree and responsibility map.
-- `sources-and-frameworks.md` — framework comparison, skills/MCP glossary, and official references.
-- `exercises.md` — discussion prompts and a capstone worksheet.
-- `stack-and-setup.md` — actual demo stack, exact setup, and proposed full-stack technologies.
-- `streaming-and-artifacts.md` — stream events, chat rendering, artifact delivery and recovery.
-- `assets/` — generated chibi illustrations embedded in the HTML.
-- `backend-building-blocks.md` — database, object storage, workspace, cache, and container notes.
+If `.env` is absent, the launcher creates it and stops so you can add the key. If an older workshop `.venv` uses Python 3.10, move that environment aside and rerun with Python 3.11+.
 
-## Framework and reference notes
+### Offline walkthrough
 
-The earlier full-stack reference, [deepagentsdk-nextjs-demo](https://github.com/chrispangg/deepagentsdk-nextjs-demo), uses the TypeScript `deepagentsdk` package and needs an Anthropic key. For this audience, the included Python script is the simpler run-later demonstration and uses Google's official `google-genai` SDK with automatic Python function calling.
+Set `AGENT_MODE=sample` and restart. This mode uses the same UI, tools, storage, streams and artifacts with **scripted responses and no model calls**. It is visibly labelled Sample and is useful for demonstrating the app when API access is unavailable. The first package installation still needs internet access.
 
-LangChain's Python [`deepagents`](https://github.com/langchain-ai/deepagents) is a separate package with related ideas. A public beginner tutorial is [mkassaf/deepagents-tutorial](https://github.com/mkassaf/deepagents-tutorial). Keep the concepts in the slides, but avoid implying these APIs are interchangeable.
+## Try these prompts
 
-## Keep your key private
+1. **Compare the three regional reports. Highlight differences in cost assumptions and cite your sources.**
+2. **What should the South team clarify before we compare its budget with North?**
+3. **Create a one-page briefing as a downloadable Markdown report. Include a comparison, open questions and source links.**
 
-- Do not paste the API key into Python source code, slides, chat, or a public repository.
-- Keep the key only in `.env`; Git ignores that file.
-- If a key is accidentally shared, revoke it in AI Studio and create another.
+Open the report in **Artifacts**, then download it. You can also upload UTF-8 `.txt` or `.md` documents up to 1 MB. This tutorial does not parse PDFs.
 
-## Editing the full-day deck
+## Components you can see
 
-The HTML is self-contained, with inline diagrams, embedded illustrations and presenter notes. Editable source is in `deck/build.py`, `deck/lesson_content.py`, `deck/streaming_chapter.py`, and `deck/extra.css`. Run `python3 deck/build.py` to rebuild the HTML, slide outline, reference map, and facilitator runbook. The build checks that planned sessions and breaks add up to an eight-hour day.
+| Component | Default local launch | Docker Compose |
+|---|---|---|
+| Frontend | Prebuilt React + TypeScript | React assets served by Nginx web container |
+| API | FastAPI + Uvicorn | Separate API container |
+| Agent | Deep Agents + Gemini in the backend process | Separate agent container |
+| Database | SQLite in `.data/workshop.db` | PostgreSQL |
+| Object storage | Key-addressed files in `.data/objects/` | MinIO (S3-compatible) |
+| File storage | Per-run staging files in `.data/workspaces/` | Agent workspace volume |
+| Cache | Bounded in-memory cache with 5-minute expiry | Redis with 5-minute expiry |
+| Streaming | Server-sent events (SSE), persisted event IDs | Same protocol, forwarded through Nginx |
+| Skill | `skills/briefing/SKILL.md` loaded into agent state | Same skill |
 
-The day includes architecture, storage, containers, a typical app scaffold, ReAct, plan-and-execute, evaluator–optimizer, multi-agent orchestration, a Ralph loop reference, ADK/LangGraph/Deep Agents/CrewAI comparisons, skills, MCP, a 40-minute streaming/chat/artifact chapter, evaluation, and group design. Framework snippets and full-stack architecture diagrams are teaching references; the only runnable application is the Gemini SDK starter.
+The local object store is a filesystem adapter with `put/get` operations; it does not claim to be a cloud storage service. Redis is used as a **cache**, not a queue, in this implementation. API-to-agent dispatch uses internal HTTP; run state and replay events are stored in the database.
+
+```mermaid
+flowchart LR
+  Browser[React chat] <--> API[FastAPI]
+  API --> Agent[Deep Agents runtime]
+  Agent --> Gemini[Gemini API]
+  Agent --> Tools[Search / read / create report]
+  API --> DB[(Messages, runs, events)]
+  Agent --> DB
+  Tools --> Cache[(TTL cache)]
+  Tools --> Objects[(Documents and artifacts)]
+  Tools --> Files[Workspace files]
+  DB --> API
+```
+
+## Optional: run the containers
+
+Install Docker with Compose. Keep the same `.env` file, then run:
+
+```bash
+docker compose up --build
+```
+
+Open **http://127.0.0.1:8080**. Only the web service publishes a port, bound to loopback. Stop with `docker compose down`; named volumes retain data. The example database, object-store and internal-worker credentials in `compose.yaml` are **local tutorial defaults**.
+
+This is a single-worker teaching app. It is not a public multi-user deployment: browser sessions isolate records, but there are no user accounts, organization access policies, production migrations, distributed job scheduler, or production retention policy. Add those before deploying beyond a trusted local workshop. Runs interrupted by a server/worker restart are marked failed; they are not silently re-executed.
+
+## Source tour
+
+```text
+frontend/src/           React chat, stream consumption, activity and artifact UI
+backend/main.py         FastAPI routes, browser sessions, run submission, SSE
+backend/agent.py        Deep Agents + Gemini, tools, stream event mapping
+backend/database.py     SQLAlchemy models: conversations, runs, events and files
+backend/storage.py      Object storage adapter, workspace files and TTL cache
+backend/static/         Committed production frontend build
+skills/briefing/        A reusable document-briefing skill
+sample-documents/       Fictional reports for the demo
+infra/                  Dockerfile and Nginx streaming proxy
+compose.yaml            Web + API + agent + PostgreSQL + Redis + MinIO
+launch.py               Local server entry point
+run_agent.py            Original optional terminal example
+```
+
+## Develop the frontend
+
+Install Node.js 22.12+ (24 recommended) only if editing React:
+
+```bash
+npm ci --prefix frontend
+npm run dev --prefix frontend
+```
+
+Run the Python backend separately with `bash run.sh`. Vite proxies `/api` to port 8000. Rebuild the distributable frontend after changes:
+
+```bash
+npm run build --prefix frontend
+```
+
+Commit the updated `backend/static/` files with the source. `frontend/package-lock.json` locks the frontend dependency tree. Major Python integrations are pinned in `requirements.txt`; `requirements-lock.txt` records the resolved Python environment used while building this version.
+
+## Workshop materials
+
+- `agentic-app-101.html`: self-contained slide deck. Arrow keys navigate; **O** opens the overview; **N** opens notes.
+- `facilitator-runbook.md`: agenda and speaker notes.
+- `demo-walkthrough.md`: presentation sequence and code tour.
+- `stack-and-setup.md`: setup details and troubleshooting.
+- `streaming-and-artifacts.md`: event contract, rendering and recovery.
+- `typical-app-scaffold.md`: repository structure and responsibilities.
+- `sources-and-frameworks.md`: official learning references.
+- `exercises.md`: group activities.
+
+To serve the slides separately: `python3 -m http.server 8765 --bind 127.0.0.1`, then open `http://127.0.0.1:8765/agentic-app-101.html`. Rebuild slides and notes with `python3 deck/build.py`.
+
+## Implementation boundaries
+
+- Gemini mode runs the actual Deep Agents framework. Sample mode is an explicitly scripted fallback.
+- The application exposes search, read and report-creation tools. Deep Agents also has an ephemeral virtual filesystem; it does not get unrestricted host filesystem or shell access.
+- A run has a 180-second timeout, graph recursion limit, and output-length limit. Cancellation is cooperative; it cannot reverse a file already saved or guarantee reversal of provider billing.
+- Final messages, partial responses and events are persisted. Refreshing the browser reconnects to an active run and replays its events.
+- The last 24 stored messages are supplied as bounded conversation context; this is not unlimited memory or durable recovery of a half-executed LangGraph checkpoint.
+- Generated Markdown renders without raw HTML. Uploaded files and model output are untrusted content.
+- MCP and advanced multi-agent orchestration remain workshop reference topics; no MCP server is needed to run this app.
+- Frontend builds were produced during implementation. Live Gemini calls, launcher tests and Docker integration tests were not run as part of this change.
+
+Keep `.env`, `.data`, and API keys out of Git. See the MIT [license](LICENSE).

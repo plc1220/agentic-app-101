@@ -1,6 +1,17 @@
 # Streaming chat and artifacts
 
-Reference design for extending the terminal demo into a web application.
+The web tutorial implements SSE streaming, saved conversations, tool activity and downloadable Markdown artifacts. This guide connects that implementation to broader design choices.
+
+## Follow the implementation
+
+1. React submits a prompt with a unique request ID to `POST /api/conversations/{id}/runs`.
+2. FastAPI saves the user message, assistant placeholder and run. It dispatches work locally or to the separate agent container.
+3. Deep Agents streams model output and tool updates. The worker saves application events in the database.
+4. React opens `EventSource` at `GET /api/runs/{id}/events`. The API reads persisted events and sends SSE frames with an `id`.
+5. The frontend appends text to the assistant message for that run, updates activity, and displays artifact cards.
+6. On completion, React fetches the canonical saved conversation. On refresh, an active run replays from the beginning into an empty assistant message; an interrupted connection resumes using `Last-Event-ID`.
+
+See `backend/agent.py`, `backend/main.py` and `frontend/src/main.tsx`. Compose uses the database as the event channel between agent and API; Redis only caches document reads.
 
 ## Three kinds of output
 
@@ -23,7 +34,6 @@ These are application-defined event names, not Deep Agents or Gemini SDK API nam
 ```json
 {
   "run_id": "run-123",
-  "message_id": "message-456",
   "event_id": 12,
   "type": "message.delta",
   "payload": {"text": "The reports agree on "}
@@ -35,12 +45,13 @@ These are application-defined event names, not Deep Agents or Gemini SDK API nam
 | `run.started` | Show accepted/in-progress state |
 | `message.delta` | Append text to the matching message |
 | `tool.started` / `tool.finished` | Update activity without mixing it into answer text |
+| `cache.hit` / `cache.miss` | Show whether a document came from cache or object storage |
 | `artifact.ready` | Create or update the artifact card |
 | `run.completed` | Mark the run complete |
 | `run.failed` | Keep any partial output marked incomplete and show the error |
 | `run.cancelled` | Stop the indicator and show cancellation |
 
-Decode bytes incrementally and buffer until a complete event is available. One network chunk is not necessarily one token, JSON object or SSE event. Use stable IDs, ordering and duplicate handling when replaying events.
+The tutorial uses native `EventSource`, which decodes SSE framing and tracks the last event ID. With a custom fetch-stream parser, decode bytes incrementally and buffer until a complete event is available. One network chunk is not necessarily one token, JSON object or SSE event. Use stable IDs, ordering and duplicate handling when replaying events.
 
 ## Rendering
 
@@ -50,9 +61,13 @@ A Markdown renderer needs to handle partial code fences, tables and links. Sanit
 
 Separate the conversation from an artifact preview panel. An artifact card should identify its type, title, version and status. The preview can use a type-specific renderer: Markdown, table/CSV, image or document viewer. Generated HTML requires an isolated preview with restricted execution and network permissions.
 
+The included app previews Markdown only, disables raw HTML, and renders model image syntax as text. Every saved report has a new artifact ID; report revision/version relationships and generated HTML previews are extension topics.
+
 ## Persistence and delivery
 
 Store final messages and run status in the database. Store artifact bytes in object storage and keep the object key, content type, size, owner and version in a database record. The backend coordinates these writes and emits `artifact.ready` only after both are usable.
+
+In this app, all artifacts have the fixed type `text/markdown`. The database stores their ID, title, object key, size, owner, run and conversation. `create_report` stages a workspace file, saves the object, commits its metadata, and then emits the ready event. Cross-store transactions and orphan cleanup are production extensions.
 
 The API checks the current viewer’s authorization before returning a download response or a short-lived signed URL. A storage URL should not be treated as an authorization policy. A revised report gets a new version so approvals refer to a specific output.
 

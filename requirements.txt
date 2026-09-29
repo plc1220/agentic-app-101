@@ -1,2 +1,12 @@
-google-genai>=1.0.0,<2.0.0
-python-dotenv>=1.0.0,<2.0.0
+deepagents==0.7.19
+langchain-google-genai==4.4.0
+fastapi==0.141.1
+uvicorn==0.54.0
+SQLAlchemy==2.1.1
+python-dotenv>=1.0,<2
+itsdangerous>=2.2,<3
+python-multipart>=0.0.20,<1
+httpx>=0.28,<1
+boto3==1.43.104
+redis==8.1.0
+psycopg[binary]==3.3.6

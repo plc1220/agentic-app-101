@@ -20,10 +20,10 @@
 | 16 | C | Frontend and backend responsibilities | 5 |
 | 17 | C | Containerization | 6 |
 | 18 | C | Docker Compose architecture | 7 |
-| 19 | C | Reference full-stack technologies | 5 |
+| 19 | C | Full-stack technologies | 5 |
 | 20 | C | Synchronous requests and background jobs | 7 |
 | 21 | C | Example project structure | 10 |
-| 22 | C | Mapping the demo to application components | 8 |
+| 22 | C | Tutorial component map | 8 |
 | 23 | C | Tool definition | 7 |
 | 24 | C | Configuration and credentials | 5 |
 | 25 | C | Exercise: application components | 10 |
@@ -59,10 +59,10 @@
 | 55 | E | Cancellation and reconnects | 5 |
 | 56 | F | Runnable demo stack | 5 |
 | 57 | F | Tool calling | 3 |
-| 58 | F | Read the actual starter | 4 |
+| 58 | F | Application code tour | 4 |
 | 59 | F | Gemini API access | 4 |
-| 60 | F | Gemini tool-calling demo | 5 |
-| 61 | F | Demo test cases | 4 |
+| 60 | F | Document chat demonstration | 5 |
+| 61 | F | Demo examples and edge cases | 4 |
 | 62 | F | Tool permissions and approval | 4 |
 | 63 | F | Agent evaluation | 4 |
 | 64 | F | Model calls, latency and cost | 3 |

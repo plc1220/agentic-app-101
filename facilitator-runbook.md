@@ -20,12 +20,12 @@ Breaks: 10:30–10:45 and 14:15–14:30. Lunch: 12:00–13:00. Total: 390 teachi
 ## Preparation
 
 - Open the HTML deck and use O for the overview, N for presenter notes, and arrow keys to navigate.
-- Read run_agent.py. Its fictional timetable is sample data, not the workshop agenda.
+- Read backend/agent.py and the three fictional reports in sample-documents/.
 - If using a live API demo, rehearse on the presenting machine with an available model and the project’s actual quota. A transcript is an acceptable fallback; label it as illustrative.
-- Keep API credentials private. The API example has not been validated with a live key as part of this content expansion.
+- Keep API credentials private. Live Gemini execution and Docker integration have not been tested during this implementation.
 - Provide paper or a shared whiteboard. Use exercises.md for participant prompts.
-- The repository is currently local; add a real remote download URL only after publishing it.
-- The starter uses Google’s SDK. Deep Agents, ADK, LangGraph and CrewAI are comparison/reference material; the scaffold is a proposed organization.
+- Tutorial repository: https://github.com/plc1220/agentic-app-101
+- The web app uses React, FastAPI, Deep Agents and Gemini. ADK, LangGraph and CrewAI are comparison material. Optional Compose services match the container diagram.
 
 ## Slide-by-slide notes
 
@@ -33,7 +33,7 @@ Breaks: 10:30–10:45 and 14:15–14:30. Lunch: 12:00–13:00. Total: 390 teachi
 
 09:00–09:30 · Agent fundamentals · 3 minutes
 
-Welcome the group. No installation or coding is required during the workshop. The downloadable starter lets participants revisit the idea afterwards. We will use a fictional workshop schedule throughout.
+Welcome the group. No installation or coding is required during the workshop. The downloadable starter lets participants revisit the idea afterwards. The demo uses three fictional regional business reports.
 
 Today is a full-day workshop. Ask participants to think of one repetitive information task they would like help with.
 
@@ -59,7 +59,7 @@ Ask the group to classify a receipt email and a research assistant. Explain that
 
 09:00–09:30 · Agent fundamentals · 6 minutes
 
-Explain that the schedule comes from a lookup function. The model is not expected to invent the time. This is an illustration, not a live API response. Ask the audience what other small lookup tasks they do regularly.
+Explain that the answer is grounded in a document-read function. The model is expected to use the reported figures. This is an illustration, not a live API response. Ask the audience what other small lookup tasks they do regularly.
 
 Show the question first. Ask “where should the answer come from?” Then discuss why an approved schedule lookup beats relying on model knowledge for a changing timetable.
 
@@ -73,7 +73,7 @@ Allow two minutes alone, two minutes in pairs and one minute for examples. Prefe
 
 09:30–10:30 · Architecture and data · 7 minutes
 
-Use the connected boxes to follow the request and then the result. The agent runtime is normally part of the backend; it is shown separately here as a responsibility. The frontend renders events and results rather than executing privileged tools. A terminal can be the user interface in a small demo. The next slide adds model and data services; the streaming chapter explains ongoing updates.
+Use the connected boxes to follow the request and then the result. The agent runtime is normally part of the backend; it is shown separately here as a responsibility. The frontend renders events and results rather than executing privileged tools. The tutorial uses a React chat interface. The next slide adds model and data services; the streaming chapter explains ongoing updates.
 
 ### 8. A typical agentic app architecture
 
@@ -127,7 +127,7 @@ Invite alternatives. Extracted text can be durable if it will be reused. A small
 
 10:45–12:00 · Containers and project structure · 5 minutes
 
-Explain why a provider API key should not be shipped in browser JavaScript. The starter keeps it in a local environment file and runs Python locally. A hosted app instead loads its own server-side credential. The browser should not be allowed to grant itself extra tool permissions.
+Explain why a provider API key should not be shipped in browser JavaScript. The app keeps it in the backend environment, loaded from .env. A hosted app instead loads its own server-side credential. The browser should not be allowed to grant itself extra tool permissions.
 
 ### 17. Containerization
 
@@ -139,13 +139,13 @@ The packing analogy introduces consistent environments. Explain that containers 
 
 10:45–12:00 · Containers and project structure · 7 minutes
 
-This is a proposed Compose design, not a shipped runnable stack. The web service serves frontend assets and proxies API requests. The API authenticates requests, manages run records and streams events. The agent service runs work and emits progress. API-to-agent traffic may use internal HTTP or Redis jobs/events; the arrows show logical communication. The API and worker may both access supporting data services as required. Cache entries can expire; a reliable queue or event log needs its own retention and persistence policy. Separating containers supports independent deployment, but a small app can run the API and agent in one process. Database and file volumes survive container replacement. Object storage can be an external service.
+This is the optional runnable compose.yaml configuration. The web service serves frontend assets and proxies API requests. The API authenticates requests, manages run records and streams events. The agent service runs work and emits progress. API-to-agent dispatch uses internal HTTP. The database stores run state and stream events; Redis only caches document reads. The API and worker may both access supporting data services as required. Cache entries can expire; a reliable queue or event log needs its own retention and persistence policy. Separating containers supports independent deployment, but a small app can run the API and agent in one process. Database and file volumes survive container replacement. Object storage can be an external service.
 
-### 19. Reference full-stack technologies
+### 19. Full-stack technologies
 
 10:45–12:00 · Containers and project structure · 5 minutes
 
-Explain each layer using the preceding container diagram. This is a proposed extension with example technologies; these packages and services are not installed by run.sh. The existing runnable app is a Python terminal program. React runs in the browser after assets are served. Uvicorn serves the FastAPI application. Deep Agents is the reference framework discussed in the workshop, but the included demo uses Google’s SDK directly. Redis can support several responsibilities, provided cache expiry is not accidentally used for durable jobs. The exact integration, versions and deployment still need implementation.
+Explain each layer using the preceding container diagram. These are the implemented technologies. The Python launcher uses local backing services; Compose provides the separate containers. The runnable app has a React frontend, FastAPI backend and Deep Agents runtime. React runs in the browser after assets are served. Uvicorn serves the FastAPI application. The application instantiates Deep Agents with the LangChain Gemini integration. Redis can support several responsibilities, provided cache expiry is not accidentally used for durable jobs. The exact integration, versions and deployment still need implementation.
 
 References: https://fastapi.tiangolo.com/advanced/custom-response/; https://docs.langchain.com/oss/python/deepagents/overview
 
@@ -161,11 +161,11 @@ Explain the queue as a numbered ticket. The request can return before work is fi
 
 Walk the tree slowly. Ask where to change a button, add a lookup, or alter an instruction. Explain services as ordinary code that talks to a database or API. Point to typical-app-scaffold.md for a more detailed map. Show that a small app can combine files initially; folders are for clarity rather than compliance.
 
-### 22. Mapping the demo to application components
+### 22. Tutorial component map
 
 10:45–12:00 · Containers and project structure · 8 minutes
 
-Open the real script and point to these four parts. Make clear this is a mapping, not a claim that those folders exist in the starter. A refactor changes organization while retaining the behavior. A browser frontend requires an API layer that the terminal sample does not need.
+Open the repository and identify these implemented components. Follow the request from React to FastAPI, the agent, and the storage adapter. The optional old run_agent.py illustrates an earlier terminal-only version.
 
 ### 23. Tool definition
 
@@ -199,13 +199,13 @@ Point out that useful changes often cross boundaries. Folder structure helps own
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
-Our runnable script uses the Google SDK and automatic function calling. It is not currently a Deep Agents app. These categories overlap in products; use them to explain responsibilities. The model choice and the framework choice are separate decisions.
+The web app uses Deep Agents and the LangChain Gemini integration. The older run_agent.py remains an optional SDK-only example. These categories overlap in products; use them to explain responsibilities. The model choice and the framework choice are separate decisions.
 
 ### 29. ReAct: reason, act, observe
 
 13:00–14:15 · Agent patterns and frameworks · 6 minutes
 
-ReAct interleaves reasoning, actions and observations. Trace the return arrow when the first search result is insufficient; take the answer branch when evidence is sufficient. The application executes the tool and enforces access. Explain the decision at a high level; do not imply that internal reasoning must be displayed. The existing Gemini SDK demo illustrates a tool-call exchange, but it does not implement the original ReAct prompting method. Connect this diagram to the agent component in the architecture slide.
+ReAct interleaves reasoning, actions and observations. Trace the return arrow when the first search result is insufficient; take the answer branch when evidence is sufficient. The application executes the tool and enforces access. Explain the decision at a high level; do not imply that internal reasoning must be displayed. The runnable Deep Agents app performs model/tool exchanges; explain ReAct as the conceptual loop rather than claiming the original paper prompt is used verbatim. Connect this diagram to the agent component in the architecture slide.
 
 References: https://arxiv.org/abs/2210.03629
 
@@ -265,7 +265,7 @@ These are facilitator recommendations, not exclusive product claims. A framework
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
-Think of nested responsibilities, not five separate machines. Deep Agents builds on LangChain and uses LangGraph. Your app still owns identity and data access. Do not present the starter SDK script as using this stack.
+Think of nested responsibilities, not five separate machines. Deep Agents builds on LangChain and uses LangGraph. Your app still owns identity and data access. Show backend/agent.py as the implementation of this stack.
 
 References: https://docs.langchain.com/oss/python/deepagents/overview
 
@@ -273,7 +273,7 @@ References: https://docs.langchain.com/oss/python/deepagents/overview
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
-Version behavior matters. Explain capabilities conceptually rather than teaching all configuration options. A virtual filesystem can be backed by memory, disk or another store; it does not imply a secure execution sandbox. Inspect installed-version docs before adapting production code.
+Version behavior matters. Explain capabilities conceptually rather than teaching all configuration options. The demo uses an ephemeral virtual filesystem for skill and scratch context, plus separate durable artifact storage. Inspect installed-version docs before adapting production code.
 
 References: https://docs.langchain.com/oss/python/deepagents/overview; https://docs.langchain.com/oss/python/deepagents/backends
 
@@ -281,7 +281,7 @@ References: https://docs.langchain.com/oss/python/deepagents/overview; https://d
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
-This is deliberately a reading exercise, not copy-and-run code. Explain that Gemini can be configured through a compatible model integration. The actual runnable file stays run_agent.py and uses Google’s SDK.
+This is deliberately a reading exercise, not copy-and-run code. Explain that Gemini can be configured through a compatible model integration. The runnable configuration is in backend/agent.py; launch.py starts the web app.
 
 References: https://docs.langchain.com/oss/python/deepagents/quickstart
 
@@ -341,13 +341,13 @@ Close the framework discussion by asking which evidence would change the team’
 
 14:30–15:10 · Streaming chat and artifacts · 5 minutes
 
-Use the three panels to introduce separate UI responsibilities. Streaming reduces the wait before visible output; it does not guarantee faster total execution. A tool may run for some time without text, so show a real status event. An artifact is a saved output such as a report, CSV or image. The chapter describes a web application extension; the runnable terminal demo waits for a complete answer. Ask what users should see during a 30-second document lookup.
+Use the three panels to introduce separate UI responsibilities. Streaming reduces the wait before visible output; it does not guarantee faster total execution. A tool may run for some time without text, so show a real status event. An artifact is a saved output such as a report, CSV or image. The runnable web demo implements these three output types. Ask what users should see during a 30-second document lookup.
 
 ### 49. Streaming response architecture
 
 14:30–15:10 · Streaming chat and artifacts · 6 minutes
 
-Explain two directions: the browser sends a request, then receives many updates. The API adapts provider or framework events to an application event format. It retains credentials server-side and filters internal or sensitive tool data before delivery. A separate worker needs an event channel back to the API, such as a broker or database-backed event log. Configure application and proxy layers to flush data rather than buffer the complete response. A saved run can continue after a browser disconnect, depending on the app policy.
+Explain two directions: the browser sends a request, then receives many updates. The API adapts provider or framework events to an application event format. It retains credentials server-side and filters internal or sensitive tool data before delivery. A separate worker needs an event channel back to the API, such as the database-backed event log used in this app. Configure application and proxy layers to flush data rather than buffer the complete response. A saved run can continue after a browser disconnect, depending on the app policy.
 
 References: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams; https://docs.langchain.com/oss/python/deepagents/streaming
 
@@ -363,7 +363,7 @@ References: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/
 
 14:30–15:10 · Streaming chat and artifacts · 5 minutes
 
-These names are a teaching schema, not SDK event names. A transport chunk may contain part of one event or several events; decode and buffer before parsing. Keep stable identifiers so tool events, messages and artifacts are not mixed between runs. Order events and discard duplicates when replaying. A final completion event is distinct from the last text delta and from an unexpectedly closed connection. A provider may expose other events, which the backend should map before sending to the browser.
+These are the application event names used in the tutorial, not the provider SDK event names. A transport chunk may contain part of one event or several events; decode and buffer before parsing. Keep stable identifiers so tool events, messages and artifacts are not mixed between runs. Order events and discard duplicates when replaying. A final completion event is distinct from the last text delta and from an unexpectedly closed connection. A provider may expose other events, which the backend should map before sending to the browser.
 
 ### 52. Chat and artifact rendering
 
@@ -397,47 +397,45 @@ References: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_r
 
 15:10–15:50 · Demo stack and walkthrough · 5 minutes
 
-The stack shown here is what attendees receive. It has no browser UI, web API, database server, container runtime or Deep Agents dependency. It uses automatic function calling and prints the completed response rather than token streaming. Explain Python as the runtime and pip packages as dependencies. The launcher manages a local virtual environment so users do not need to activate it manually. A working internet connection, a valid key and access/quota for the configured model are required. The repository currently has no public remote; distribute the folder or publish a real URL before asking people to clone.
+This is the actual included app. Node.js is needed only to modify the frontend; a production bundle is committed. The launcher creates .venv and starts the local server at http://127.0.0.1:8000. Docker Compose is optional and serves port 8080. Explain local adapters versus external services using the same component responsibilities. Gemini mode requires a valid API key and quota; sample mode is explicitly scripted and uses no model.
 
 ### 57. Tool calling
 
 15:10–15:50 · Demo stack and walkthrough · 3 minutes
 
-Python runs the lookup function after Gemini requests it. Google’s SDK handles the function-call exchange. The sample tool reads fixed data. It does not send email, modify files, or run shell commands. Tool use can require several model requests; do not describe it as necessarily one API request.
+Deep Agents executes the application’s tools after a model request. The tools read authorized documents and can save a requested Markdown report. They do not send email or execute arbitrary host commands. Tool use can require several model requests; do not describe it as necessarily one API request.
 
-### 58. Read the actual starter
+### 58. Application code tour
 
 15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
-Open the file on the presenter’s screen; do not ask attendees to type. Walk through it from top to bottom without explaining every Python token. The sample schedule is fictional and is not the timing plan for today. Tool matching is basic; use unknown-query behavior as a discussion point.
+Open these files and trace one request. Application events use stable run IDs and persisted event IDs. Tools enforce document ownership before reading data. The agent model is configured in .env. Show skills/briefing/SKILL.md and explain how it is loaded into virtual agent state.
 
 ### 59. Gemini API access
 
 15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
-Presenter project: my-rd-coe-demo-gen-ai. In AI Studio, select or import that project if you have access. A key inherits its project’s billing tier; an existing billed project is not necessarily on the free tier. A project ID alone is not a credential. The script uses the Developer API key, not Vertex AI. Refer to the linked current pricing/billing pages rather than quoting fixed quotas.
+In AI Studio, select a project you can use for the workshop. A key inherits its project’s billing tier; an existing billed project is not necessarily on the free tier. A project ID alone is not a credential. The script uses the Developer API key, not Vertex AI. Refer to the linked current pricing/billing pages rather than quoting fixed quotas.
 
-The model configured in .env must still be available. Check the key’s actual project tier before any API call. Free-tier access is not guaranteed for an existing billed project. Do not promise one request per answer because automatic function calling may involve several.
+The model configured in .env must still be available. Check the key’s actual project tier before any API call. Free-tier access is not guaranteed for an existing billed project. Do not promise one request per answer because the agent loop may involve several model calls.
 
-### 60. Gemini tool-calling demo
+### 60. Document chat demonstration
 
 15:10–15:50 · Demo stack and walkthrough · 5 minutes
 
-The output on this slide is illustrative; wording varies by model. run_agent.py is a small Gemini tool-calling example, not a Deep Agents implementation. The original Deep Agents repos remain optional reading. Be clear that this program does not persist a conversation or implement a web frontend.
+Use the real browser app. Three fictional reports are already available. Ask for a comparison, then a follow-up and a downloadable Markdown briefing. Show sources, activity, a cache hit on repeated reads, and the artifact panel. Refresh to demonstrate saved messages. If Gemini is unavailable, set AGENT_MODE=sample and clearly label the walkthrough as scripted. Use demo-walkthrough.md for the presentation sequence.
 
-If a live API run has not been rehearsed, use the labelled example output and walk the code. The slide is not evidence that the API has been tested.
-
-### 61. Demo test cases
+### 61. Demo examples and edge cases
 
 15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
-Use fixed sample inputs. If the tool gives a bad match, explain the matching limitation rather than attributing everything to the model. Missing credentials, unavailable model and quota errors are environment cases. Never claim a successful run if only the transcript was shown.
+The three reports are fictional. Model wording can vary. Missing evidence should be acknowledged. The last 24 messages are used as bounded context; this is not unlimited memory. An unknown topic should produce an evidence limitation rather than invented report facts. Refresh preserves the run; server restart marks interrupted runs failed rather than re-executing them.
 
 ### 62. Tool permissions and approval
 
 15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
-Use an email example: finding an address, drafting an email, and sending it are different actions. For writes, retries need duplicate prevention. Mention idempotency as an optional word meaning repeated requests do not repeat a side effect. The starter is read-only.
+Use an email example: finding an address, drafting an email, and sending it are different actions. For writes, retries need duplicate prevention. Mention idempotency as an optional word meaning repeated requests do not repeat a side effect. The demo reads documents and can save a requested report as an artifact; it does not publish externally.
 
 ### 63. Agent evaluation
 
@@ -455,7 +453,7 @@ Use a hypothetical budget in model calls rather than unsupported prices: three m
 
 15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
-Refer back to completion criteria and execution limits from the patterns section. Use this to bridge the small starter and production diagram. These are app responsibilities regardless of framework. Do not imply the current starter implements this checklist or is ready for untrusted multi-user deployment.
+Refer back to completion criteria and execution limits from the patterns section. Use this to discuss extensions needed before public deployment. These are app responsibilities regardless of framework. Do not imply the current starter implements this checklist or is ready for untrusted multi-user deployment.
 
 ### 66. Capstone: a document briefing assistant
 
@@ -473,7 +471,7 @@ Suggested pacing: 3 minutes user/output, 6 minutes architecture/data, 5 minutes 
 
 15:50–16:35 · System design exercise · 7 minutes
 
-This is a proposed extension, not the behavior of run_agent.py. Explain that the review screen needs authorization tied to the draft version. A skill can carry the briefing format; an MCP server can expose document reads. Neither is mandatory for a first version.
+Compare this document assistant design to the implemented web app. Explain that the review screen needs authorization tied to the draft version. A skill can carry the briefing format; an MCP server can expose document reads. Neither is mandatory for a first version.
 
 ### 69. Share and compare
 
@@ -485,9 +483,9 @@ Allow approximately 60 seconds per group plus 30 seconds feedback, adapting to g
 
 15:50–16:35 · System design exercise · 3 minutes
 
-No attendee needs to install or run anything during the session. The local repo has not yet been published to a remote host; supply the eventual download link separately. The launch scripts install packages on the first run, so internet access is required. Keep .env private; Git ignores it.
+No attendee needs to install or run anything during the session. Tutorial repository: https://github.com/plc1220/agentic-app-101. The React build is included; Node.js is not required for the default launch. The launch scripts install packages on the first run, so internet access is required. Keep .env private; Git ignores it.
 
-The Git repository is local. Supply the published URL if it is published later; otherwise distribute the folder through an approved channel. Explain that .env.example is copied and real keys remain private.
+Clone https://github.com/plc1220/agentic-app-101 or download its ZIP. Explain that .env.example is copied and real keys remain private.
 
 ### 71. Production considerations
 

@@ -1,0 +1,91 @@
+# Local teaching deployment. Only the web service publishes a loopback port.
+x-app: &app
+  build:
+    context: .
+    dockerfile: infra/Dockerfile
+    target: python-app
+  env_file: .env
+  environment: &settings
+    DATABASE_URL: postgresql+psycopg://workshop:workshop@database:5432/workshop
+    REDIS_URL: redis://cache:6379/0
+    S3_ENDPOINT: http://objects:9000
+    S3_BUCKET: workshop
+    AWS_ACCESS_KEY_ID: workshop
+    AWS_SECRET_ACCESS_KEY: workshop-local-only-2026
+    WORKER_TOKEN: local-workshop-internal-token
+    DATA_DIR: /app/.data
+  depends_on:
+    database:
+      condition: service_healthy
+    cache:
+      condition: service_healthy
+    objects:
+      condition: service_started
+  restart: on-failure
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile
+      target: web
+    ports: ["127.0.0.1:8080:80"]
+    depends_on:
+      api:
+        condition: service_healthy
+      agent:
+        condition: service_healthy
+  api:
+    <<: *app
+    environment:
+      <<: *settings
+      SERVICE_ROLE: api
+      WORKER_URL: http://agent:8000
+    volumes: ["api-data:/app/.data"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  agent:
+    <<: *app
+    environment:
+      <<: *settings
+      SERVICE_ROLE: agent
+    volumes: ["workspaces:/app/.data"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: workshop
+      POSTGRES_PASSWORD: workshop
+      POSTGRES_DB: workshop
+    volumes: ["database-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U workshop"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  cache:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  objects:
+    image: quay.io/minio/minio:latest
+    command: server /data
+    environment:
+      MINIO_ROOT_USER: workshop
+      MINIO_ROOT_PASSWORD: workshop-local-only-2026
+    volumes: ["object-data:/data"]
+volumes:
+  api-data:
+  workspaces:
+  database-data:
+  object-data:

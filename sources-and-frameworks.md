@@ -68,7 +68,7 @@ The example event names in the deck are a teaching schema, not a framework API. 
 
 ## Package names matter
 
-The runnable starter uses google-genai. LangChain’s Python deepagents package is separate from the community TypeScript deepagentsdk demo previously referenced. Do not reuse one package’s APIs as if they belonged to another.
+The web tutorial uses Python deepagents and langchain-google-genai. The older run_agent.py is optional SDK-only reading. The community TypeScript deepagentsdk package is a separate project.
 
 ## Skills and MCP together
 

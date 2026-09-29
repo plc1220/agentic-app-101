@@ -1,46 +1,45 @@
 # Presenter demo walkthrough
 
-The runnable program is `run_agent.py`. It uses the Google Gen AI SDK with one Python lookup function. Attendees can watch during the session and use the launch scripts later.
+## Prepare
 
-## What is implemented
+Run the app using the README. Choose Gemini mode for the real Deep Agents demonstration. If API access is unavailable, select `AGENT_MODE=sample`, restart, and explicitly describe the response as scripted. A build is not evidence of a successful live API run.
 
-- Local terminal input and output; complete responses rather than token streaming.
-- Gemini Developer API call using the explicit key from `.env` beside the script.
-- Automatic Python function calling through the SDK.
-- A fixed sample workshop timetable and simple keyword aliases.
-- A printed message when the lookup function runs.
+## 10-minute walkthrough
 
-Each question starts fresh. There is no saved conversation, web frontend, database, deployed service, Deep Agents runtime, or MCP server in the starter. Those appear in the full-day deck as architectural extensions and reference choices.
+1. Open http://127.0.0.1:8000 (or port 8080 with Compose). Identify conversation history, chat and Sources.
+2. Open **Explore the stack**. Map each displayed technology to the architecture slide.
+3. Open a sample report. Explain that the text is stored as an object and its metadata is a database record.
+4. Ask: **Compare the three regional reports. Highlight differences in cost assumptions and cite your sources.**
+5. Watch **Agent activity**: search, read, and cache hit/miss events. Explain that model text is streamed into one assistant message.
+6. Ask a follow-up about the South report. Explain bounded conversation history and cached document reads.
+7. Ask for a **downloadable one-page briefing with source links**. Open the artifact preview and download the Markdown file.
+8. Explain the file lifecycle: workspace staging file → object store → database metadata → artifact event → UI card.
+9. Refresh the browser. Messages and artifacts remain; an active run can reconnect through its persisted event IDs.
+10. Point to Stop. Explain that cancellation requests the worker to stop; it cannot undo completed writes.
 
-## Before presenting
+If desired, upload a small fictional UTF-8 `.md` or `.txt` document. PDF parsing is outside this tutorial.
 
-1. Install Python 3.10+ and follow `stack-and-setup.md`. The launcher creates `.venv` and installs packages automatically.
-2. Get a key from Google AI Studio, using the intended project's tier and quota. A project ID alone does not authenticate requests.
-3. Select a model currently available to that key. The `.env` setting can change without changing the code.
-4. Rehearse the known, unknown and follow-up examples. The content work has not established a successful live API run.
-5. Keep a labelled recording or screenshots for a network/model outage. Keep credentials off-screen.
+## Code tour
 
-## Walkthrough sequence
+| File | Show |
+|---|---|
+| `frontend/src/main.tsx` | React message state, EventSource, artifact preview |
+| `backend/main.py` | Run submission, ownership checks, event stream |
+| `backend/agent.py` | `create_deep_agent`, Gemini model, application tools, skill |
+| `backend/database.py` | Conversation, Message, Run, StreamEvent, Document, Artifact |
+| `backend/storage.py` | Object adapter, workspace staging and TTL cache |
+| `skills/briefing/SKILL.md` | Reusable report guidance loaded into virtual agent state |
+| `compose.yaml` | Separate web/API/agent containers and backing services |
 
-1. Show `SESSIONS`: this is fictional demonstration data, not today's full-day agenda.
-2. Show `find_workshop_session`: a normal Python function with a documented input and output.
-3. Show `tools=[find_workshop_session]`: this makes the function available to the model through the SDK.
-4. Explain the instruction and model setting; identify `google-genai`, `python-dotenv`, the terminal UI and in-memory sample data.
-5. Run the program if rehearsed, or use the deck's labelled illustrative transcript.
-6. Ask “When is the backend session?” and point out the printed tool event.
-7. Ask about an unknown session and discuss what a good missing-data answer looks like.
-8. Ask a follow-up such as “What happens after that?” and explain the sample's lack of conversation memory.
+## What each storage type does
 
-The exact wording may vary. A tool exchange can use multiple model calls. Basic keyword matching can return the wrong item for ambiguous topics; discuss that as an application limitation.
+- **Database:** messages, run lifecycle, replayable events and file metadata.
+- **Object storage:** original documents and generated Markdown files, addressed by keys.
+- **File storage:** per-run intermediate report files.
+- **Cache:** repeated document reads with 5-minute expiry, scoped by owner, ID and content hash.
 
-## Failure fallback
+## Implementation limits
 
-If credentials, quota, model availability or network access prevents a run, show the source and the labelled example output. Keep the session on schedule; do not spend the class repairing the environment. Do not claim an API test succeeded when only a transcript was shown.
+This is a local teaching app with anonymous browser-session ownership, one worker process and bounded context. It is not a production account system or a distributed durable workflow engine. The UI handles streamed text and tool events, but not executable HTML artifacts. The Deep Agents scratch filesystem is ephemeral between runs; the app separately persists conversation messages and artifacts.
 
-## Optional public references
-
-- [LangChain Deep Agents](https://github.com/langchain-ai/deepagents): framework source and examples.
-- [Python Deep Agents tutorial](https://github.com/mkassaf/deepagents-tutorial): community learning examples.
-- [deepagentsdk Next.js demo](https://github.com/chrispangg/deepagentsdk-nextjs-demo): earlier full-stack community reference; uses a distinct TypeScript SDK and Anthropic in its README.
-
-These repositories are additional reading. They are not dependencies of this starter, and their setup/version requirements should be checked separately.
+Keep the original `run_agent.py` only as optional reading for the simplest SDK tool-call example.

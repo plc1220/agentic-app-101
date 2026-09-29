@@ -1,79 +1,51 @@
 # Stack and setup
 
-## Runnable demo
+The complete quick start and component matrix are in [README.md](README.md).
 
-| Layer | Technology | Purpose |
+## Default launch
+
+Install Python 3.11+, get the repository, copy `.env.example` to `.env`, add the Gemini key, and run `bash run.sh` or `run.bat`. Open http://127.0.0.1:8000.
+
+The launcher manages `.venv` and pip. The committed React bundle is served by FastAPI. SQLite, a local object-store adapter, workspace files and an in-memory TTL cache initialize automatically. Python is the only runtime attendees need to install.
+
+Deep Agents calls Gemini through `langchain-google-genai`. The key stays on the server. This path uses the Gemini Developer API and does not need a Cloud project ID in the runtime configuration, ADC, `gcloud`, or a service-account file.
+
+## Environment variables
+
+| Setting | Default | Purpose |
 |---|---|---|
-| Runtime | Python 3.10+ | Runs the local application |
-| Interface | Terminal | Reads questions and prints complete responses |
-| Model client | `google-genai` | Calls the Gemini Developer API and manages Python function calling |
-| Configuration | `python-dotenv` | Loads `.env` beside the script |
-| Tool | `find_workshop_session()` | Reads a fixed in-memory timetable |
-| Environment | Python `venv` + `pip` | Isolates and installs dependencies |
+| `GEMINI_API_KEY` | Required for Gemini mode | Model API credential |
+| `GEMINI_MODEL` | `gemini-3-flash-preview` | Model accessible to your project |
+| `AGENT_MODE` | `gemini` | `sample` selects a labelled no-model walkthrough |
+| `PORT` | `8000` | Local launcher port |
+| `DATA_DIR` | `.data/` | Local persistent and workspace files |
+| `DATABASE_URL` | Local SQLite | Compose overrides with PostgreSQL |
+| `REDIS_URL` | Unset | Compose selects Redis; otherwise local TTL cache |
+| `S3_ENDPOINT` | Unset | Compose selects MinIO; otherwise local files |
+| `WORKER_URL` | Unset | Compose dispatches to a separate agent service |
+| `WORKER_TOKEN` | Unset locally | Authenticates internal worker requests in Compose |
 
-The launcher installs `google-genai` and `python-dotenv`, including their dependencies. The demo does not install React, FastAPI, Deep Agents, Docker, a database, or an MCP server. It does not stream tokens or save conversation history.
+The optional container path uses `docker compose up --build` and serves the app at http://127.0.0.1:8080. Example service credentials are intended only for the private Compose network in this local tutorial. Do not expose it as a production system.
 
-## Setup steps
+## Troubleshooting
 
-1. Install **Python 3.10 or newer**. On Windows, enable the installer’s PATH option or use the Python launcher.
-2. Get the repository folder. Git is optional if you receive a ZIP or copied folder. A public Git remote has not yet been configured.
-3. Copy `.env.example` to `.env` in that folder. Replace `paste_your_key_here` with your Gemini API key.
-4. Keep or update `GEMINI_MODEL` to a model your key can access. The current example value is `gemini-3-flash-preview`.
-5. Run the launcher from the repository folder:
-
-| Platform | Command |
+| Symptom | Action |
 |---|---|
-| macOS / Linux | `bash run.sh` |
-| Windows Command Prompt | `run.bat` |
-| Windows PowerShell | `.\run.bat` |
+| Python missing or older than 3.11 | Install a supported Python; reopen the terminal |
+| Existing `.venv` uses an old Python | Move the old environment aside; rerun with Python 3.11+ |
+| `venv` / `ensurepip` missing on Linux | Install the distribution’s Python venv component |
+| UI says the key is missing | Edit `.env` and restart the server |
+| Model/permission/quota error | Check the key’s project and `GEMINI_MODEL`; use sample mode if unavailable |
+| Address already in use | Set `PORT` to a free port and restart |
+| Frontend source changed but UI did not | Run `npm run build --prefix frontend` and refresh |
+| Docker agent unavailable | Inspect `docker compose logs api agent`; wait for service health |
+| MinIO not ready during initial startup | API retries via Compose’s restart policy |
+| Run failed after restart | Saved partial output remains; submit a new request |
 
-The launcher creates `.venv` if needed, upgrades pip, installs `requirements.txt`, and starts `run_agent.py`. There is no manual virtual-environment activation step. If `.env` is missing, the launcher creates a template and asks you to fill it in before continuing.
+Changing from `127.0.0.1` to `localhost`, clearing cookies, or using another browser creates a separate anonymous session, so its conversation list differs. Use the same browser origin to return to saved chats.
 
-Internet access is needed for package installation and Gemini requests. API access depends on the key’s project, model availability and quota. The content update has not established a successful live API run with your key.
+## Data and reset
 
-### Project and credentials
+Default local data lives in `.data/` and is ignored by Git. The session signing secret also lives there. Preserve the folder to retain chats and files; move it aside while the server is stopped for a fresh workshop instance. Compose uses named volumes for its database, objects, API session secret and workspace.
 
-Use an AI Studio Gemini Developer API key associated with the intended project, such as `my-rd-coe-demo-gen-ai` if you have access. A project ID is not a credential. This script explicitly selects the Developer API and the key loaded from `.env`; it does not require `gcloud` login, a service-account JSON file, or a Vertex AI configuration.
-
-Free-tier eligibility depends on the selected model and project tier. Check [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing) and [model availability](https://ai.google.dev/gemini-api/docs/models). Keep keys in `.env`, which Git ignores.
-
-### Common setup issues
-
-| Message or symptom | Next action |
-|---|---|
-| Python not found / old Python | Install Python 3.10+ and reopen the terminal |
-| `venv` or `ensurepip` unavailable | Install the Python venv component for your OS distribution |
-| Missing or placeholder key | Edit `.env` beside `run_agent.py` |
-| Model not found or unavailable | Select an accessible model in `GEMINI_MODEL` |
-| Quota / rate-limit response | Inspect that project’s quota and tier |
-| Package download blocked | Check internet access and any organization-managed proxy |
-
-## Reference full-stack design
-
-This is a proposed web application architecture for discussion. It is not installed or implemented by the demo launchers.
-
-| Layer | Example technology | Why it appears in the design |
-|---|---|---|
-| Frontend | React + TypeScript | Chat state, progress, streaming text and artifact previews |
-| Web service | Static assets and API reverse proxy | Delivers the frontend and routes same-origin requests |
-| API service | FastAPI + Uvicorn | Authenticates requests, creates runs, streams events and serves artifacts |
-| Agent worker | Python + Deep Agents + Gemini | Executes agent tasks and emits progress events |
-| Database | PostgreSQL | Stores conversations, run status and artifact metadata |
-| Cache | Redis | Speeds up repeat lookups; entries have an expiry |
-| Jobs / events | A queue or event log; Redis is one option | Connects API and worker; needs separate durability/retention policies |
-| Object storage | S3-compatible storage or Google Cloud Storage | Holds uploads and generated files |
-| File storage | Mounted filesystem volume | Provides workspace paths for processing |
-| Local deployment | Docker Compose | Connects web, API, worker and support services |
-
-Separate containers make responsibilities visible and allow independent deployment. A first version can combine the API and agent runtime in one service. A container boundary is not a complete sandbox for untrusted code.
-
-## How a streamed request works
-
-1. The browser submits a message to the API.
-2. The API checks permissions and creates a run record.
-3. The agent worker calls the model and tools.
-4. The worker emits events; the API forwards appropriate updates to the browser.
-5. The frontend updates the current message, tool status and artifact cards.
-6. The backend saves final messages and artifacts for refresh and later retrieval.
-
-See `streaming-and-artifacts.md` for event, rendering and recovery details.
+The app does not implement automatic retention cleanup or account management. Use fictional workshop data. Setup does not call Gemini until a user submits a message in Gemini mode.

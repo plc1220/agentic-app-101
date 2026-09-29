@@ -1,6 +1,6 @@
 # Agentic App 101
 
-A beginner-friendly workshop pack and a tiny runnable Gemini agent. Attendees can take this folder home and run the example later; nobody needs to install software or run code during the workshop.
+A beginner-friendly full-day workshop (09:00–17:00) and a tiny runnable Gemini agent. Attendees can take this folder home and run the example later; nobody needs to install software or run code during the workshop.
 
 ## Start here
 
@@ -34,9 +34,12 @@ This is tool calling: the model chooses whether a capability should be used, whi
 - `agentic-app-101.html` — workshop slide deck. Use left/right arrow keys; `N` opens presenter notes, `O` opens the slide overview, and `F` toggles fullscreen. The illustrated deck works offline without external fonts or images.
 - `run_agent.py` — small Gemini tool-calling example.
 - `run.sh` / `run.bat` — install dependencies and start the program.
-- `facilitator-runbook.md` — suggested three-hour facilitation plan.
-- `slide-outline.md` — original slide sequence and teaching notes.
-- `demo-walkthrough.md` — reference repository walkthrough and backup plan.
+- `facilitator-runbook.md` — full-day agenda, exact slide timings, and speaker notes.
+- `slide-outline.md` — all slides, modules, and planned durations.
+- `demo-walkthrough.md` — presenter walkthrough of the actual starter and backup plan.
+- `typical-app-scaffold.md` — a reference project tree and responsibility map.
+- `sources-and-frameworks.md` — framework comparison, skills/MCP glossary, and official references.
+- `exercises.md` — discussion prompts and a capstone worksheet.
 - `backend-building-blocks.md` — database, object storage, workspace, cache, and container notes.
 
 ## Framework and reference notes
@@ -50,3 +53,9 @@ LangChain's Python [`deepagents`](https://github.com/langchain-ai/deepagents) is
 - Do not paste the API key into Python source code, slides, chat, or a public repository.
 - Keep the key only in `.env`; Git ignores that file.
 - If a key is accidentally shared, revoke it in AI Studio and create another.
+
+## Editing the full-day deck
+
+The HTML is self-contained, with inline diagrams and presenter notes. Editable source is in `deck/build.py`, `deck/lesson_content.py`, and `deck/extra.css`. Run `python3 deck/build.py` to rebuild the HTML, slide outline, reference map, and facilitator runbook. The build checks that planned sessions and breaks add up to an eight-hour day.
+
+The day includes architecture, storage, containers, a typical app scaffold, ADK/LangGraph/Deep Agents/CrewAI comparisons, skills, MCP, evaluation, and group design. Framework snippets and full-stack architecture diagrams are teaching references; the only runnable application is the Gemini SDK starter.

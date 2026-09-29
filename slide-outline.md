@@ -1,72 +1,63 @@
-# Slide outline — Agentic App 101
+# Full-day slide outline
 
-Target: 12–14 slides for a three-hour workshop, with live walkthrough and discussion.
-
-## 1. Title: Agentic App 101
-
-Subtitle: From backend building blocks to a running agent application.
-Speaker note: Set the expectation that this is application architecture, not a prompt-engineering session.
-
-## 2. Learning goals
-
-- Sketch the main pieces of a full-stack agent app.
-- Choose a home for durable data, files, and cached values.
-- Explain what containerization gives the development workflow.
-- Trace a request through a Deep Agents example.
-
-## 3. A chatbot versus an agentic app
-
-Diagram: User → app API → model; then agent loop: model → selected tool → result → model → answer.
-Point: tools and control flow make actions possible; the surrounding app still owns policy and product behavior.
-
-## 4. Reference architecture
-
-Diagram: Browser UI → application API → agent framework → model provider; agent tools → application services/data. Add streaming events back to UI.
-Speaker note: Keep the model provider outside the app boundary and mark network calls/failure points.
-
-## 5. Where does the data go?
-
-Use invoice assistant examples: DB = job/status/metadata; object storage = original PDF/report; workspace = temporary processing files; cache = reusable lookup/short-lived result.
-Question: Which item must survive a restart?
-
-## 6. Storage roles at a glance
-
-Table from `backend-building-blocks.md`. Emphasize lifecycle, ownership, and access controls.
-
-## 7. Containers in one picture
-
-Diagram: image → running container; Compose connects web, API, DB; volume/external storage holds persistent state.
-Callout: environment variables and secrets are injected at runtime.
-
-## 8. Deep Agents: the useful mental model
-
-Show model + instructions + tools + harness/runtime + state. Explain framework as reusable control and middleware, not a replacement for application architecture.
-
-## 9. What makes a “deep” agent?
-
-Concept cards: planning, filesystem/workspace, context management, subagents/delegation. Explain these are ways to manage longer tasks; they are not automatically required for every use case.
-
-## 10. The demo repo and its boundaries
-
-Show repo architecture: Next.js UI → `/api/chat` → TypeScript `deepagentsdk` → local sandbox; stream events to chat/file explorer.
-Disclosure: this is a community demo and uses the TypeScript SDK. It is not the Python `deepagents` package and does not demonstrate a production database/object-storage/cache stack.
-
-## 11. Live walkthrough: follow one request
-
-1. Enter prompt.
-2. Inspect API route and agent configuration.
-3. Watch event stream and tool activity.
-4. Inspect created file in workspace.
-5. Change one instruction and rerun.
-
-## 12. Application responsibilities around the agent
-
-Identity and authorization; input validation; tool limits; error handling; persistence; user confirmation; observability; quotas/cost controls.
-
-## 13. Small-group design prompt
-
-“Build an assistant that reads uploaded invoices and drafts an expense summary.” Teams sketch API, agent capability, database record, object storage, workspace, cache, and approval point.
-
-## 14. Wrap-up
-
-Three takeaways: make capabilities explicit; put data in the right store; choose the simplest orchestration that meets the task. Add links to demo and Python tutorial.
+| Slide | Module | Topic | Minutes |
+|---|---|---|---|
+| 1 | A | Agentic App 101 | 3 |
+| 2 | A | Our day together | 4 |
+| 3 | A | What you will be able to explain | 5 |
+| 4 | A | Chat, workflow or agent | 7 |
+| 5 | A | An assistant with a toolbox | 6 |
+| 6 | A | Pick a small first job | 5 |
+| 7 | B | The app around the AI | 7 |
+| 8 | B | A typical agentic app architecture | 10 |
+| 9 | B | Trace a single request | 7 |
+| 10 | B | Four homes for data | 8 |
+| 11 | B | One upload, several data types | 8 |
+| 12 | B | Retrieval: give the model the right pages | 7 |
+| 13 | B | Where should these go? | 8 |
+| 14 | B | Storage exercise: suggested answer | 5 |
+| 15 | break | Morning break | 15 |
+| 16 | C | Frontend and backend responsibilities | 7 |
+| 17 | C | Package the app | 7 |
+| 18 | C | A local Compose architecture | 8 |
+| 19 | C | Short requests and long jobs | 8 |
+| 20 | C | A typical project scaffold | 10 |
+| 21 | C | From one script to those folders | 8 |
+| 22 | C | A tool needs a clear contract | 7 |
+| 23 | C | Configuration belongs outside the logic | 5 |
+| 24 | C | Which folder would you change? | 10 |
+| 25 | C | Scaffold exercise: suggested answer | 5 |
+| 26 | break | Lunch | 60 |
+| 27 | D | Model, SDK, framework and runtime | 5 |
+| 28 | D | Frameworks: side-by-side comparison | 9 |
+| 29 | D | Choose by the question you need to answer | 5 |
+| 30 | D | Where Deep Agents fits | 5 |
+| 31 | D | What Deep Agents can add | 6 |
+| 32 | D | A framework configuration: the shape | 6 |
+| 33 | D | Three coordination patterns | 5 |
+| 34 | D | Skills, tools and MCP in one view | 5 |
+| 35 | D | A skill is a reusable task guide | 5 |
+| 36 | D | An MCP server connects capabilities | 6 |
+| 37 | D | One example using all three | 4 |
+| 38 | D | Other terms you may hear | 4 |
+| 39 | D | Choose an approach | 6 |
+| 40 | D | Compare on fit, then validate | 4 |
+| 41 | break | Afternoon break | 15 |
+| 42 | E | The model asks, the app acts | 6 |
+| 43 | E | Read the actual starter | 7 |
+| 44 | E | Start with Gemini | 6 |
+| 45 | E | Meet the workshop helper | 7 |
+| 46 | E | Try useful and awkward questions | 6 |
+| 47 | E | Before a tool changes something | 7 |
+| 48 | E | How would we judge the assistant? | 8 |
+| 49 | E | Where time and cost go | 7 |
+| 50 | E | A small release checklist | 6 |
+| 51 | F | Capstone: a document briefing assistant | 5 |
+| 52 | F | Draw your first version | 25 |
+| 53 | F | One possible capstone design | 10 |
+| 54 | F | Share and compare | 15 |
+| 55 | F | Try it after the workshop | 5 |
+| 56 | G | As the app grows | 5 |
+| 57 | G | Five quick checks | 10 |
+| 58 | G | Questions and next steps | 10 |
+| 59 | G | Your first agent starts small | 5 |

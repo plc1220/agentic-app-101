@@ -8,11 +8,12 @@ Audience: people with mixed technical confidence. No participant installation or
 |---|---|---|---|
 | 09:00–09:30 | Agent fundamentals | 1–6 | 30 |
 | 09:30–10:30 | Architecture and data | 7–14 | 60 |
-| 10:45–12:00 | Containers and project structure | 16–25 | 75 |
-| 13:00–14:15 | Agent patterns and frameworks | 27–45 | 75 |
-| 14:30–15:30 | Walkthrough and reliability | 47–55 | 60 |
-| 15:30–16:30 | System design exercise | 56–60 | 60 |
-| 16:30–17:00 | Review and Q&A | 61–64 | 30 |
+| 10:45–12:00 | Containers and project structure | 16–26 | 75 |
+| 13:00–14:15 | Agent patterns and frameworks | 28–46 | 75 |
+| 14:30–15:10 | Streaming chat and artifacts | 48–55 | 40 |
+| 15:10–15:50 | Demo stack and walkthrough | 56–65 | 40 |
+| 15:50–16:35 | System design exercise | 66–70 | 45 |
+| 16:35–17:00 | Review and Q&A | 71–74 | 25 |
 
 Breaks: 10:30–10:45 and 14:15–14:30. Lunch: 12:00–13:00. Total: 390 teaching/activity minutes + 90 break/lunch minutes = 480 minutes.
 
@@ -72,15 +73,13 @@ Allow two minutes alone, two minutes in pairs and one minute for examples. Prefe
 
 09:30–10:30 · Architecture and data · 7 minutes
 
-Use plain language before technical names. The screen is the frontend; the application services are the backend. The take-home script uses a terminal as its screen. A web app can provide a chat interface around the same idea.
-
-Translate screen to frontend and app services to backend. Keep the same example: the schedule comes from a tool. The starter uses a terminal; this diagram also fits a web frontend.
+Use the connected boxes to follow the request and then the result. The agent runtime is normally part of the backend; it is shown separately here as a responsibility. The frontend renders events and results rather than executing privileged tools. A terminal can be the user interface in a small demo. The next slide adds model and data services; the streaming chapter explains ongoing updates.
 
 ### 8. A typical agentic app architecture
 
 09:30–10:30 · Architecture and data · 10 minutes
 
-Walk left to right, then downward. Identity and permissions belong to the app/API and tools. The model runs at a provider; it does not directly connect to your database. A backend function makes the database query. Explain one failure per boundary: login, model quota, tool timeout, storage access.
+Follow a request across the top. Tool and application service code controls access to data. The cache may hold repeated lookup results with an expiry; access and cache keys must respect the user and data version. Database records include conversation and run status; object storage holds uploaded files and artifacts; file storage provides workspace paths. These are logical responsibilities, not a requirement for one server each. The streaming chapter later explains the event path back to the browser and how artifacts are rendered.
 
 ### 9. Request lifecycle
 
@@ -126,75 +125,83 @@ Invite alternatives. Extracted text can be durable if it will be reused. A small
 
 ### 16. Frontend and backend responsibilities
 
-10:45–12:00 · Containers and project structure · 7 minutes
+10:45–12:00 · Containers and project structure · 5 minutes
 
 Explain why a provider API key should not be shipped in browser JavaScript. The starter keeps it in a local environment file and runs Python locally. A hosted app instead loads its own server-side credential. The browser should not be allowed to grant itself extra tool permissions.
 
 ### 17. Containerization
 
-10:45–12:00 · Containers and project structure · 7 minutes
+10:45–12:00 · Containers and project structure · 6 minutes
 
 The packing analogy introduces consistent environments. Explain that containers can be replaced, so data that must survive needs a mounted volume or external store. The starter does not require Docker. This slide teaches the concept without adding installation work.
 
 ### 18. Docker Compose architecture
 
-10:45–12:00 · Containers and project structure · 8 minutes
+10:45–12:00 · Containers and project structure · 7 minutes
 
-A Compose file defines service images, ports, dependencies and volumes. Startup order alone is not a health check. Secrets should be supplied at runtime. This is a teaching diagram; the existing starter does not ship this Docker stack. Show how replacing the app container need not delete a database volume.
+This is a proposed Compose design, not a shipped runnable stack. The web service serves frontend assets and proxies API requests. The API authenticates requests, manages run records and streams events. The agent service runs work and emits progress. API-to-agent traffic may use internal HTTP or Redis jobs/events; the arrows show logical communication. The API and worker may both access supporting data services as required. Cache entries can expire; a reliable queue or event log needs its own retention and persistence policy. Separating containers supports independent deployment, but a small app can run the API and agent in one process. Database and file volumes survive container replacement. Object storage can be an external service.
 
-### 19. Synchronous requests and background jobs
+### 19. Reference full-stack technologies
 
-10:45–12:00 · Containers and project structure · 8 minutes
+10:45–12:00 · Containers and project structure · 5 minutes
+
+Explain each layer using the preceding container diagram. This is a proposed extension with example technologies; these packages and services are not installed by run.sh. The existing runnable app is a Python terminal program. React runs in the browser after assets are served. Uvicorn serves the FastAPI application. Deep Agents is the reference framework discussed in the workshop, but the included demo uses Google’s SDK directly. Redis can support several responsibilities, provided cache expiry is not accidentally used for durable jobs. The exact integration, versions and deployment still need implementation.
+
+References: https://fastapi.tiangolo.com/advanced/custom-response/; https://docs.langchain.com/oss/python/deepagents/overview
+
+### 20. Synchronous requests and background jobs
+
+10:45–12:00 · Containers and project structure · 7 minutes
 
 Explain the queue as a numbered ticket. The request can return before work is finished. A worker process takes a ticket and performs the job. The database holds durable job status so refreshing the browser does not lose it. Avoid introducing queue vendor details.
 
-### 20. Example project structure
+### 21. Example project structure
 
 10:45–12:00 · Containers and project structure · 10 minutes
 
 Walk the tree slowly. Ask where to change a button, add a lookup, or alter an instruction. Explain services as ordinary code that talks to a database or API. Point to typical-app-scaffold.md for a more detailed map. Show that a small app can combine files initially; folders are for clarity rather than compliance.
 
-### 21. Mapping the demo to application components
+### 22. Mapping the demo to application components
 
 10:45–12:00 · Containers and project structure · 8 minutes
 
 Open the real script and point to these four parts. Make clear this is a mapping, not a claim that those folders exist in the starter. A refactor changes organization while retaining the behavior. A browser frontend requires an API layer that the terminal sample does not need.
 
-### 22. Tool definition
+### 23. Tool definition
 
 10:45–12:00 · Containers and project structure · 7 minutes
 
 A docstring is part of what the SDK can expose to the model. A tool description is not an authorization mechanism. Validate arguments, handle missing records and return a useful error. Avoid giving a model unrestricted query strings or arbitrary shell execution for a lookup task.
 
-### 23. Configuration and credentials
+### 24. Configuration and credentials
 
 10:45–12:00 · Containers and project structure · 5 minutes
 
 Explain the difference between a configuration value and a secret. A free-tier key inherits the associated project’s tier and quota. Do not change an existing project’s billing during the workshop. Show only placeholders, never a real key.
 
-### 24. Exercise: application components
+### 25. Exercise: application components
 
 10:45–12:00 · Containers and project structure · 10 minutes
 
 Six minutes in pairs, three minutes to compare, one minute to surface alternate designs. People can answer using the diagram without reading Python.
 
-### 25. Application components: suggested answers
+### 26. Application components: suggested answers
 
 10:45–12:00 · Containers and project structure · 5 minutes
 
 Point out that useful changes often cross boundaries. Folder structure helps ownership but does not remove integration work. An evaluation is a realistic example with an expected outcome, not merely a test that the function returns something.
 
-### 26. Lunch
+### 27. Lunch
 
 12:00–13:00 · 60 minutes. Resume on time; no setup tasks for participants.
 
-### 27. Model, SDK, framework and runtime
+### 28. Model, SDK, framework and runtime
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 Our runnable script uses the Google SDK and automatic function calling. It is not currently a Deep Agents app. These categories overlap in products; use them to explain responsibilities. The model choice and the framework choice are separate decisions.
 
-### 28. ReAct: reason, act, observe
+### 29. ReAct: reason, act, observe
 
 13:00–14:15 · Agent patterns and frameworks · 6 minutes
 
@@ -202,7 +209,7 @@ ReAct interleaves reasoning, actions and observations. Trace the return arrow wh
 
 References: https://arxiv.org/abs/2210.03629
 
-### 29. Plan-and-execute
+### 30. Plan-and-execute
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -210,7 +217,7 @@ Walk through the document assistant. Planning is useful when a task has several 
 
 References: https://www.anthropic.com/engineering/building-effective-agents
 
-### 30. Evaluator–optimizer
+### 31. Evaluator–optimizer
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -218,7 +225,7 @@ Apply this to a document briefing draft. A validator can check required fields, 
 
 References: https://www.anthropic.com/engineering/building-effective-agents
 
-### 31. Multi-agent orchestration
+### 32. Multi-agent orchestration
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -226,7 +233,7 @@ Replace the earlier brief orchestration slide with this concrete example. Explai
 
 References: https://www.anthropic.com/engineering/building-effective-agents
 
-### 32. Ralph loop: repeated agent runs
+### 33. Ralph loop: repeated agent runs
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -234,13 +241,13 @@ Keep this as a reference example for building the document assistant, rather tha
 
 References: https://ghuntley.com/ralph/
 
-### 33. Completion criteria and execution limits
+### 34. Completion criteria and execution limits
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 Close the pattern section by asking where the stop decision belongs. Application code should enforce budgets and permissions. Model assertions of completion are not sufficient evidence. A run may finish with a partial result or a request for human input. Transition: an execution pattern describes the flow; a framework supplies tools for implementing it. Frameworks can support several patterns, and a single application can combine patterns. Revisit these controls in the capstone.
 
-### 34. Frameworks: side-by-side comparison
+### 35. Frameworks: side-by-side comparison
 
 13:00–14:15 · Agent patterns and frameworks · 7 minutes
 
@@ -248,13 +255,13 @@ Allow about one minute per framework, then compare tradeoffs and take questions.
 
 References: https://google.github.io/adk-docs/; https://docs.langchain.com/oss/python/langgraph/overview; https://docs.langchain.com/oss/python/deepagents/overview; https://docs.crewai.com/en/introduction
 
-### 35. Framework selection
+### 36. Framework selection
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 These are facilitator recommendations, not exclusive product claims. A framework is useful when it reduces repeated work and improves control. Do not choose based only on a feature checklist or a popular name. Ask what people on the team can maintain.
 
-### 36. Where Deep Agents fits
+### 37. Where Deep Agents fits
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
@@ -262,7 +269,7 @@ Think of nested responsibilities, not five separate machines. Deep Agents builds
 
 References: https://docs.langchain.com/oss/python/deepagents/overview
 
-### 37. Deep Agents capabilities
+### 38. Deep Agents capabilities
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -270,7 +277,7 @@ Version behavior matters. Explain capabilities conceptually rather than teaching
 
 References: https://docs.langchain.com/oss/python/deepagents/overview; https://docs.langchain.com/oss/python/deepagents/backends
 
-### 38. Deep Agents configuration
+### 39. Deep Agents configuration
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -278,7 +285,7 @@ This is deliberately a reading exercise, not copy-and-run code. Explain that Gem
 
 References: https://docs.langchain.com/oss/python/deepagents/quickstart
 
-### 39. Skills, tools and MCP
+### 40. Skills, tools and MCP
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
@@ -286,7 +293,7 @@ The skill is guidance, the tool is an operation, and MCP is an integration inter
 
 References: https://agentskills.io/what-are-skills; https://modelcontextprotocol.io/docs/learn/architecture
 
-### 40. Agent Skills
+### 41. Agent Skills
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
@@ -294,7 +301,7 @@ Skills package task guidance and supporting assets. The host/framework decides h
 
 References: https://agentskills.io/what-are-skills; https://docs.langchain.com/oss/python/deepagents/skills
 
-### 41. Model Context Protocol (MCP)
+### 42. Model Context Protocol (MCP)
 
 13:00–14:15 · Agent patterns and frameworks · 5 minutes
 
@@ -302,145 +309,207 @@ MCP is the protocol, and the server is software implementing it. The server may 
 
 References: https://modelcontextprotocol.io/docs/learn/architecture
 
-### 42. Example: skills and MCP tools
+### 43. Example: skills and MCP tools
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 An application can call an ordinary local function without MCP. MCP is useful for reusable connections across compatible clients. The document remains input data; embedded instructions in it should not override application policy. This is a design example, not an installed integration.
 
-### 43. Additional concepts
+### 44. Additional concepts
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 These terms describe needs or patterns, not things every beginner app must install. A container alone is not proof of safe untrusted-code execution. A log should avoid credentials and unnecessary personal data. Use the reference handout for links and definitions.
 
-### 44. Choose an approach
+### 45. Choose an approach
 
 13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 There is no unique correct framework. A reasonable answer might evaluate Deep Agents for long tasks, use a comparison-writing skill, and reuse an authorized document connector. ADK or a graph can also fit depending on the team. Assess the reasoning, not the logo.
 
-### 45. Framework selection criteria
+### 46. Framework selection criteria
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 Close the framework discussion by asking which evidence would change the team’s mind. Small representative trials are more informative than a long feature list. Keep the chosen approach minimal and add integrations when they solve a real need.
 
-### 46. Afternoon break
+### 47. Afternoon break
 
 14:15–14:30 · 15 minutes. Resume on time; no setup tasks for participants.
 
-### 47. Tool calling
+### 48. Streaming chat and artifacts
 
-14:30–15:30 · Walkthrough and reliability · 6 minutes
+14:30–15:10 · Streaming chat and artifacts · 5 minutes
+
+Use the three panels to introduce separate UI responsibilities. Streaming reduces the wait before visible output; it does not guarantee faster total execution. A tool may run for some time without text, so show a real status event. An artifact is a saved output such as a report, CSV or image. The chapter describes a web application extension; the runnable terminal demo waits for a complete answer. Ask what users should see during a 30-second document lookup.
+
+### 49. Streaming response architecture
+
+14:30–15:10 · Streaming chat and artifacts · 6 minutes
+
+Explain two directions: the browser sends a request, then receives many updates. The API adapts provider or framework events to an application event format. It retains credentials server-side and filters internal or sensitive tool data before delivery. A separate worker needs an event channel back to the API, such as a broker or database-backed event log. Configure application and proxy layers to flush data rather than buffer the complete response. A saved run can continue after a browser disconnect, depending on the app policy.
+
+References: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams; https://docs.langchain.com/oss/python/deepagents/streaming
+
+### 50. HTTP streaming, SSE and WebSockets
+
+14:30–15:10 · Streaming chat and artifacts · 4 minutes
+
+These options overlap. Native EventSource opens a GET stream, so a common design creates a run with POST and subscribes using its run ID. A POST fetch can also return SSE data, but the client then parses the stream and manages reconnect logic. EventSource has built-in reconnection behavior; that alone does not persist or replay application events. WebSocket is useful when frequent bidirectional messages are needed. Plain polling remains a valid option for coarse job status. Recommend a single HTTP streaming approach for a first text-chat application.
+
+References: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events; https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+
+### 51. Application stream events
+
+14:30–15:10 · Streaming chat and artifacts · 5 minutes
+
+These names are a teaching schema, not SDK event names. A transport chunk may contain part of one event or several events; decode and buffer before parsing. Keep stable identifiers so tool events, messages and artifacts are not mixed between runs. Order events and discard duplicates when replaying. A final completion event is distinct from the last text delta and from an unexpectedly closed connection. A provider may expose other events, which the backend should map before sending to the browser.
+
+### 52. Chat and artifact rendering
+
+14:30–15:10 · Streaming chat and artifacts · 6 minutes
+
+This is a static mockup; the displayed controls are illustrations. Append chunks to the same assistant message, not a new bubble per chunk. Render plain text safely or use a Markdown renderer that handles incomplete code blocks, links and tables. Disable or sanitize raw HTML. Batch visual updates and auto-scroll only when the reader is already near the bottom. Preserve scroll position when someone reads earlier content. Expose concise status updates for accessibility rather than announcing every token. Keep tool activity separate from answer text; do not expose hidden reasoning or credentials. The artifact opens in a separate preview with its own identity and version.
+
+### 53. Message and run lifecycle
+
+14:30–15:10 · Streaming chat and artifacts · 4 minutes
+
+Distinguish a conversation from a run: one conversation contains multiple messages, and one run may involve multiple tools and model calls. A message can have partial content while the run is active. Keep partial output clearly marked if execution fails. Persistence supports refresh; local UI state alone does not. A cache can accelerate access but should not be the only copy of a completed conversation. Store replayable events when resuming a stream is a requirement; otherwise reload the latest saved state.
+
+### 54. Artifact storage and delivery
+
+14:30–15:10 · Streaming chat and artifacts · 5 minutes
+
+An artifact is a durable output, not merely a long chat message. Store content type, size, owner, status and version. The arrows show a lifecycle, not a claim that object storage writes database records itself; backend code coordinates both writes. Return an authorized download endpoint or a short-lived signed URL after checking ownership. Use safe renderers for Markdown, CSV and images. Treat generated HTML as untrusted; sandbox previews and restrict scripts and network access. Use a new version for revisions so review applies to a specific artifact.
+
+References: https://fastapi.tiangolo.com/advanced/custom-response/
+
+### 55. Cancellation and reconnects
+
+14:30–15:10 · Streaming chat and artifacts · 5 minutes
+
+Aborting the browser fetch does not by itself guarantee that the server, model or worker stops. The backend must propagate cancellation and report the resulting state. Cancellation cannot undo side effects already committed. Reconnect with the same run ID; replay after the last event ID only if the backend retains events. If replay is unavailable, fetch a current snapshot rather than silently starting a duplicate run. For long tasks, persist job state outside the streaming connection. Ask participants to explain what a refresh should do during report generation.
+
+References: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams; https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+
+### 56. Runnable demo stack
+
+15:10–15:50 · Demo stack and walkthrough · 5 minutes
+
+The stack shown here is what attendees receive. It has no browser UI, web API, database server, container runtime or Deep Agents dependency. It uses automatic function calling and prints the completed response rather than token streaming. Explain Python as the runtime and pip packages as dependencies. The launcher manages a local virtual environment so users do not need to activate it manually. A working internet connection, a valid key and access/quota for the configured model are required. The repository currently has no public remote; distribute the folder or publish a real URL before asking people to clone.
+
+### 57. Tool calling
+
+15:10–15:50 · Demo stack and walkthrough · 3 minutes
 
 Python runs the lookup function after Gemini requests it. Google’s SDK handles the function-call exchange. The sample tool reads fixed data. It does not send email, modify files, or run shell commands. Tool use can require several model requests; do not describe it as necessarily one API request.
 
-### 48. Read the actual starter
+### 58. Read the actual starter
 
-14:30–15:30 · Walkthrough and reliability · 7 minutes
+15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
 Open the file on the presenter’s screen; do not ask attendees to type. Walk through it from top to bottom without explaining every Python token. The sample schedule is fictional and is not the timing plan for today. Tool matching is basic; use unknown-query behavior as a discussion point.
 
-### 49. Gemini API access
+### 59. Gemini API access
 
-14:30–15:30 · Walkthrough and reliability · 6 minutes
+15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
 Presenter project: my-rd-coe-demo-gen-ai. In AI Studio, select or import that project if you have access. A key inherits its project’s billing tier; an existing billed project is not necessarily on the free tier. A project ID alone is not a credential. The script uses the Developer API key, not Vertex AI. Refer to the linked current pricing/billing pages rather than quoting fixed quotas.
 
 The model configured in .env must still be available. Check the key’s actual project tier before any API call. Free-tier access is not guaranteed for an existing billed project. Do not promise one request per answer because automatic function calling may involve several.
 
-### 50. Gemini tool-calling demo
+### 60. Gemini tool-calling demo
 
-14:30–15:30 · Walkthrough and reliability · 7 minutes
+15:10–15:50 · Demo stack and walkthrough · 5 minutes
 
 The output on this slide is illustrative; wording varies by model. run_agent.py is a small Gemini tool-calling example, not a Deep Agents implementation. The original Deep Agents repos remain optional reading. Be clear that this program does not persist a conversation or implement a web frontend.
 
 If a live API run has not been rehearsed, use the labelled example output and walk the code. The slide is not evidence that the API has been tested.
 
-### 51. Demo test cases
+### 61. Demo test cases
 
-14:30–15:30 · Walkthrough and reliability · 6 minutes
+15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
 Use fixed sample inputs. If the tool gives a bad match, explain the matching limitation rather than attributing everything to the model. Missing credentials, unavailable model and quota errors are environment cases. Never claim a successful run if only the transcript was shown.
 
-### 52. Tool permissions and approval
+### 62. Tool permissions and approval
 
-14:30–15:30 · Walkthrough and reliability · 7 minutes
+15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
 Use an email example: finding an address, drafting an email, and sending it are different actions. For writes, retries need duplicate prevention. Mention idempotency as an optional word meaning repeated requests do not repeat a side effect. The starter is read-only.
 
-### 53. Agent evaluation
+### 63. Agent evaluation
 
-14:30–15:30 · Walkthrough and reliability · 8 minutes
+15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
 Ask groups to propose one additional example. A small evaluation set can include known, unknown, ambiguous and malformed inputs. Record model/config changes and compare results. An answer sounding confident does not establish correctness.
 
-### 54. Model calls, latency and cost
+### 64. Model calls, latency and cost
 
-14:30–15:30 · Walkthrough and reliability · 7 minutes
+15:10–15:50 · Demo stack and walkthrough · 3 minutes
 
 Use a hypothetical budget in model calls rather than unsupported prices: three model calls per request times fifty requests is 150 calls, before retries. Real billing often uses token counts and differs by provider/tool. Limit steps, set timeouts and monitor usage. Free tier means constrained allowance, not unlimited use.
 
-### 55. Production checklist
+### 65. Production checklist
 
-14:30–15:30 · Walkthrough and reliability · 6 minutes
+15:10–15:50 · Demo stack and walkthrough · 4 minutes
 
 Refer back to completion criteria and execution limits from the patterns section. Use this to bridge the small starter and production diagram. These are app responsibilities regardless of framework. Do not imply the current starter implements this checklist or is ready for untrusted multi-user deployment.
 
-### 56. Capstone: a document briefing assistant
+### 66. Capstone: a document briefing assistant
 
-15:30–16:30 · System design exercise · 5 minutes
+15:50–16:35 · System design exercise · 5 minutes
 
 Form groups of three or four. Give each group the exercise sheet. Assign roles such as user, app designer and reviewer. Keep a common use case so architecture choices are comparable across groups.
 
-### 57. Exercise: system architecture
+### 67. Exercise: system architecture
 
-15:30–16:30 · System design exercise · 25 minutes
+15:50–16:35 · System design exercise · 20 minutes
 
-Suggested pacing: 5 minutes user/output, 8 minutes architecture/data, 7 minutes framework/integrations/permissions, 5 minutes failure path and pitch. Walk around and ask who may see a document, what survives refresh, and how they know a draft is supported. Use paper or a shared whiteboard; no laptop is necessary.
+Suggested pacing: 3 minutes user/output, 6 minutes architecture/data, 5 minutes patterns/integrations, 6 minutes streaming states, failure path and pitch. Walk around and ask who may see a document, what survives refresh, and how they know a draft is supported. Use paper or a shared whiteboard; no laptop is necessary.
 
-### 58. Document assistant reference architecture
+### 68. Document assistant reference architecture
 
-15:30–16:30 · System design exercise · 10 minutes
+15:50–16:35 · System design exercise · 7 minutes
 
 This is a proposed extension, not the behavior of run_agent.py. Explain that the review screen needs authorization tied to the draft version. A skill can carry the briefing format; an MCP server can expose document reads. Neither is mandatory for a first version.
 
-### 59. Share and compare
+### 69. Share and compare
 
-15:30–16:30 · System design exercise · 15 minutes
+15:50–16:35 · System design exercise · 10 minutes
 
 Allow approximately 60 seconds per group plus 30 seconds feedback, adapting to group count. Compare decisions instead of ranking brands. If there are many groups, pair them and ask two groups to share with the room.
 
-### 60. Demo setup
+### 70. Demo setup
 
-15:30–16:30 · System design exercise · 5 minutes
+15:50–16:35 · System design exercise · 3 minutes
 
 No attendee needs to install or run anything during the session. The local repo has not yet been published to a remote host; supply the eventual download link separately. The launch scripts install packages on the first run, so internet access is required. Keep .env private; Git ignores it.
 
 The Git repository is local. Supply the published URL if it is published later; otherwise distribute the folder through an approved channel. Explain that .env.example is copied and real keys remain private.
 
-### 61. Production considerations
+### 71. Production considerations
 
-16:30–17:00 · Review and Q&A · 5 minutes
+16:35–17:00 · Review and Q&A · 4 minutes
 
 Connect this to a real customer-order assistant: it needs identity, authorization, durable records, and error handling. Keep it concrete. A retry is not always safe for a tool that sends or charges something; read-only lookup is a simpler first capability.
 
-### 62. Knowledge check
+### 72. Knowledge check
 
-16:30–17:00 · Review and Q&A · 10 minutes
+16:35–17:00 · Review and Q&A · 8 minutes
 
 Suggested answers: object storage with access controls; no, models and frameworks are distinct choices; skill is reusable guidance while a tool is an executable capability; tools/resources/prompts through MCP; identity, authorization, validated inputs and any required human approval. Ask for explanations rather than exact terminology.
 
-### 63. Questions and next steps
+### 73. Questions and next steps
 
-16:30–17:00 · Review and Q&A · 10 minutes
+16:35–17:00 · Review and Q&A · 9 minutes
 
 Reserve this time for questions. If an answer depends on a provider version or company policy, identify what to verify rather than guessing. Point to sources-and-frameworks.md and typical-app-scaffold.md. Advanced implementation details can be taken after the session.
 
-### 64. Summary
+### 74. Summary
 
-16:30–17:00 · Review and Q&A · 5 minutes
+16:35–17:00 · Review and Q&A · 4 minutes
 
 Invite questions. Recap using the schedule example: one lookup function, fixed sample data, and application-controlled access. The guide is README.md in the same folder. The deck and starter work from local files; no external fonts or images are needed.
 

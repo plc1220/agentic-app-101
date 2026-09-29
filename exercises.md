@@ -40,7 +40,7 @@ A team needs to read several reports and draft a comparison.
 - Would a direct function or an existing MCP connection help retrieve documents?
 - What evidence would make you change your choice?
 
-## E. Capstone — 60-minute session
+## E. Capstone — 45-minute session
 
 Design a document briefing assistant for an operations colleague. It reads three uploaded reports and prepares a one-page draft with sources. A person reviews the result before publication.
 
@@ -55,15 +55,18 @@ Design a document briefing assistant for an operations colleague. It reads three
 | Where final drafts live | |
 | Execution pattern and framework | |
 | Completion criteria and execution limits | |
+| Streaming status and partial messages | |
+| Artifact preview and download | |
+| Cancellation and reconnect behavior | |
 | Optional skill | |
 | Optional MCP connection | |
 | Approval point | |
 | Failure and recovery path | |
 | One quality check | |
 
-The session includes a 5-minute brief, 25 minutes drawing, a 10-minute suggested design, 15 minutes sharing and a 5-minute take-home walkthrough.
+The session includes a 5-minute brief, 20 minutes drawing, a 7-minute reference design, 10 minutes sharing and a 3-minute setup recap.
 
-## F. Five quick checks — 10 minutes
+## F. Knowledge check — 8 minutes
 
 Explain each answer to a partner:
 

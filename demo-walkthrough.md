@@ -4,8 +4,8 @@ The runnable program is `run_agent.py`. It uses the Google Gen AI SDK with one P
 
 ## What is implemented
 
-- Local terminal input and output.
-- Gemini model call using a key in `.env`.
+- Local terminal input and output; complete responses rather than token streaming.
+- Gemini Developer API call using the explicit key from `.env` beside the script.
 - Automatic Python function calling through the SDK.
 - A fixed sample workshop timetable and simple keyword aliases.
 - A printed message when the lookup function runs.
@@ -14,7 +14,7 @@ Each question starts fresh. There is no saved conversation, web frontend, databa
 
 ## Before presenting
 
-1. Install Python 3.10+ and use the README setup instructions.
+1. Install Python 3.10+ and follow `stack-and-setup.md`. The launcher creates `.venv` and installs packages automatically.
 2. Get a key from Google AI Studio, using the intended project's tier and quota. A project ID alone does not authenticate requests.
 3. Select a model currently available to that key. The `.env` setting can change without changing the code.
 4. Rehearse the known, unknown and follow-up examples. The content work has not established a successful live API run.
@@ -25,7 +25,7 @@ Each question starts fresh. There is no saved conversation, web frontend, databa
 1. Show `SESSIONS`: this is fictional demonstration data, not today's full-day agenda.
 2. Show `find_workshop_session`: a normal Python function with a documented input and output.
 3. Show `tools=[find_workshop_session]`: this makes the function available to the model through the SDK.
-4. Explain the instruction and the model configuration in plain language.
+4. Explain the instruction and model setting; identify `google-genai`, `python-dotenv`, the terminal UI and in-memory sample data.
 5. Run the program if rehearsed, or use the deck's labelled illustrative transcript.
 6. Ask “When is the backend session?” and point out the printed tool event.
 7. Ask about an unknown session and discuss what a good missing-data answer looks like.

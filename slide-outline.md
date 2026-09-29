@@ -17,52 +17,62 @@
 | 13 | B | Exercise: select storage | 8 |
 | 14 | B | Storage exercise: suggested answer | 5 |
 | 15 | break | Morning break | 15 |
-| 16 | C | Frontend and backend responsibilities | 7 |
-| 17 | C | Containerization | 7 |
-| 18 | C | Docker Compose architecture | 8 |
-| 19 | C | Synchronous requests and background jobs | 8 |
-| 20 | C | Example project structure | 10 |
-| 21 | C | Mapping the demo to application components | 8 |
-| 22 | C | Tool definition | 7 |
-| 23 | C | Configuration and credentials | 5 |
-| 24 | C | Exercise: application components | 10 |
-| 25 | C | Application components: suggested answers | 5 |
-| 26 | break | Lunch | 60 |
-| 27 | D | Model, SDK, framework and runtime | 4 |
-| 28 | D | ReAct: reason, act, observe | 6 |
-| 29 | D | Plan-and-execute | 4 |
-| 30 | D | Evaluator–optimizer | 4 |
-| 31 | D | Multi-agent orchestration | 4 |
-| 32 | D | Ralph loop: repeated agent runs | 4 |
-| 33 | D | Completion criteria and execution limits | 3 |
-| 34 | D | Frameworks: side-by-side comparison | 7 |
-| 35 | D | Framework selection | 3 |
-| 36 | D | Where Deep Agents fits | 3 |
-| 37 | D | Deep Agents capabilities | 4 |
-| 38 | D | Deep Agents configuration | 4 |
-| 39 | D | Skills, tools and MCP | 3 |
-| 40 | D | Agent Skills | 4 |
-| 41 | D | Model Context Protocol (MCP) | 5 |
-| 42 | D | Example: skills and MCP tools | 3 |
-| 43 | D | Additional concepts | 3 |
-| 44 | D | Choose an approach | 4 |
-| 45 | D | Framework selection criteria | 3 |
-| 46 | break | Afternoon break | 15 |
-| 47 | E | Tool calling | 6 |
-| 48 | E | Read the actual starter | 7 |
-| 49 | E | Gemini API access | 6 |
-| 50 | E | Gemini tool-calling demo | 7 |
-| 51 | E | Demo test cases | 6 |
-| 52 | E | Tool permissions and approval | 7 |
-| 53 | E | Agent evaluation | 8 |
-| 54 | E | Model calls, latency and cost | 7 |
-| 55 | E | Production checklist | 6 |
-| 56 | F | Capstone: a document briefing assistant | 5 |
-| 57 | F | Exercise: system architecture | 25 |
-| 58 | F | Document assistant reference architecture | 10 |
-| 59 | F | Share and compare | 15 |
-| 60 | F | Demo setup | 5 |
-| 61 | G | Production considerations | 5 |
-| 62 | G | Knowledge check | 10 |
-| 63 | G | Questions and next steps | 10 |
-| 64 | G | Summary | 5 |
+| 16 | C | Frontend and backend responsibilities | 5 |
+| 17 | C | Containerization | 6 |
+| 18 | C | Docker Compose architecture | 7 |
+| 19 | C | Reference full-stack technologies | 5 |
+| 20 | C | Synchronous requests and background jobs | 7 |
+| 21 | C | Example project structure | 10 |
+| 22 | C | Mapping the demo to application components | 8 |
+| 23 | C | Tool definition | 7 |
+| 24 | C | Configuration and credentials | 5 |
+| 25 | C | Exercise: application components | 10 |
+| 26 | C | Application components: suggested answers | 5 |
+| 27 | break | Lunch | 60 |
+| 28 | D | Model, SDK, framework and runtime | 4 |
+| 29 | D | ReAct: reason, act, observe | 6 |
+| 30 | D | Plan-and-execute | 4 |
+| 31 | D | Evaluator–optimizer | 4 |
+| 32 | D | Multi-agent orchestration | 4 |
+| 33 | D | Ralph loop: repeated agent runs | 4 |
+| 34 | D | Completion criteria and execution limits | 3 |
+| 35 | D | Frameworks: side-by-side comparison | 7 |
+| 36 | D | Framework selection | 3 |
+| 37 | D | Where Deep Agents fits | 3 |
+| 38 | D | Deep Agents capabilities | 4 |
+| 39 | D | Deep Agents configuration | 4 |
+| 40 | D | Skills, tools and MCP | 3 |
+| 41 | D | Agent Skills | 4 |
+| 42 | D | Model Context Protocol (MCP) | 5 |
+| 43 | D | Example: skills and MCP tools | 3 |
+| 44 | D | Additional concepts | 3 |
+| 45 | D | Choose an approach | 4 |
+| 46 | D | Framework selection criteria | 3 |
+| 47 | break | Afternoon break | 15 |
+| 48 | E | Streaming chat and artifacts | 5 |
+| 49 | E | Streaming response architecture | 6 |
+| 50 | E | HTTP streaming, SSE and WebSockets | 4 |
+| 51 | E | Application stream events | 5 |
+| 52 | E | Chat and artifact rendering | 6 |
+| 53 | E | Message and run lifecycle | 4 |
+| 54 | E | Artifact storage and delivery | 5 |
+| 55 | E | Cancellation and reconnects | 5 |
+| 56 | F | Runnable demo stack | 5 |
+| 57 | F | Tool calling | 3 |
+| 58 | F | Read the actual starter | 4 |
+| 59 | F | Gemini API access | 4 |
+| 60 | F | Gemini tool-calling demo | 5 |
+| 61 | F | Demo test cases | 4 |
+| 62 | F | Tool permissions and approval | 4 |
+| 63 | F | Agent evaluation | 4 |
+| 64 | F | Model calls, latency and cost | 3 |
+| 65 | F | Production checklist | 4 |
+| 66 | G | Capstone: a document briefing assistant | 5 |
+| 67 | G | Exercise: system architecture | 20 |
+| 68 | G | Document assistant reference architecture | 7 |
+| 69 | G | Share and compare | 10 |
+| 70 | G | Demo setup | 3 |
+| 71 | H | Production considerations | 4 |
+| 72 | H | Knowledge check | 8 |
+| 73 | H | Questions and next steps | 9 |
+| 74 | H | Summary | 4 |

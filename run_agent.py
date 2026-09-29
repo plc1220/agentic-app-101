@@ -1,12 +1,13 @@
 """A tiny Gemini agent demo: ask about the workshop and watch it use one tool."""
 
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-load_dotenv()
+load_dotenv(Path(__file__).with_name(".env"), override=True)
 
 MODEL = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
 
@@ -42,11 +43,12 @@ def find_workshop_session(topic: str) -> dict:
 
 
 def main() -> None:
-    if not os.getenv("GEMINI_API_KEY"):
+    api_key = os.getenv("GEMINI_API_KEY", "").strip()
+    if not api_key or api_key == "paste_your_key_here":
         print("Gemini API key not found. Add GEMINI_API_KEY to the .env file first.")
-        return
+        raise SystemExit(1)
 
-    client = genai.Client()
+    client = genai.Client(api_key=api_key, vertexai=False)
     print("Agentic App 101 helper")
     print("Ask when a workshop session is, or type 'quit' to leave.\n")
 

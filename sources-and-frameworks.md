@@ -39,8 +39,18 @@ Fit guidance reflects the workshop’s design judgment. Many use cases can be im
 
 Patterns can be combined. A Ralph outer loop may invoke an agent with an inner ReAct-style loop. Framework selection is a separate implementation decision. Set completion criteria and enforce execution limits in the application.
 
+## Streaming and rendering
+
+Application events connect backend execution to frontend state. Use stable run/message/event IDs, parse complete events rather than arbitrary network chunks, and separate text updates from tool status and artifacts. Persist messages and artifacts independently of the browser connection. SSE, streamed fetch responses and WebSockets are delivery choices; durable replay requires backend support.
+
+The example event names in the deck are a teaching schema, not a framework API. See streaming-and-artifacts.md for the design walkthrough.
+
 ## Source references
 
+- [MDN: server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
+- [MDN: readable streams](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams)
+- [FastAPI responses](https://fastapi.tiangolo.com/advanced/custom-response/)
+- [Deep Agents streaming](https://docs.langchain.com/oss/python/deepagents/streaming)
 - [ReAct paper](https://arxiv.org/abs/2210.03629)
 - [Agent workflow patterns](https://www.anthropic.com/engineering/building-effective-agents)
 - [Ralph: original description](https://ghuntley.com/ralph/)

@@ -4,11 +4,13 @@ A beginner-friendly full-day workshop (09:00–17:00) and a tiny runnable Gemini
 
 ## Start here
 
-1. Install Python 3.10 or newer.
+1. Install Python 3.10 or newer and get the repository folder (ZIP/copy, or clone after a public URL is available). Git is optional when using a ZIP.
 2. Get a Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey). The Gemini API has a free tier for selected models, subject to current model availability and project quotas. Free-tier usage has data-use terms that differ from paid use; do not enter confidential or personal data.
 3. Copy `.env.example` to `.env` and paste the API key after `GEMINI_API_KEY=`.
-4. Run `run.bat` on Windows, or `./run.sh` on macOS/Linux. The first run installs the required Python packages.
+4. Run `run.bat` in Windows Command Prompt (`.\run.bat` in PowerShell), or `bash run.sh` on macOS/Linux. The launcher creates `.venv` and installs the Python packages automatically.
 5. Ask: `When is the backend session?` or `What happens in the demo?` Type `quit` to exit.
+
+There is no manual virtual-environment activation or cloud CLI setup. Internet access, a valid API key and model quota are required. See `stack-and-setup.md` for platform instructions and common setup issues. The repository is currently local with no public clone URL.
 
 The example is intentionally small: Gemini answers questions and can call one safe Python function that looks up a fixed workshop schedule. The terminal prints when the function is used. No database, cloud storage, Docker, or framework setup is required.
 
@@ -40,6 +42,9 @@ This is tool calling: the model chooses whether a capability should be used, whi
 - `typical-app-scaffold.md` — a reference project tree and responsibility map.
 - `sources-and-frameworks.md` — framework comparison, skills/MCP glossary, and official references.
 - `exercises.md` — discussion prompts and a capstone worksheet.
+- `stack-and-setup.md` — actual demo stack, exact setup, and proposed full-stack technologies.
+- `streaming-and-artifacts.md` — stream events, chat rendering, artifact delivery and recovery.
+- `assets/` — generated chibi illustrations embedded in the HTML.
 - `backend-building-blocks.md` — database, object storage, workspace, cache, and container notes.
 
 ## Framework and reference notes
@@ -56,6 +61,6 @@ LangChain's Python [`deepagents`](https://github.com/langchain-ai/deepagents) is
 
 ## Editing the full-day deck
 
-The HTML is self-contained, with inline diagrams and presenter notes. Editable source is in `deck/build.py`, `deck/lesson_content.py`, and `deck/extra.css`. Run `python3 deck/build.py` to rebuild the HTML, slide outline, reference map, and facilitator runbook. The build checks that planned sessions and breaks add up to an eight-hour day.
+The HTML is self-contained, with inline diagrams, embedded illustrations and presenter notes. Editable source is in `deck/build.py`, `deck/lesson_content.py`, `deck/streaming_chapter.py`, and `deck/extra.css`. Run `python3 deck/build.py` to rebuild the HTML, slide outline, reference map, and facilitator runbook. The build checks that planned sessions and breaks add up to an eight-hour day.
 
-The day includes architecture, storage, containers, a typical app scaffold, ReAct, plan-and-execute, evaluator–optimizer, multi-agent orchestration, a Ralph loop reference, ADK/LangGraph/Deep Agents/CrewAI comparisons, skills, MCP, evaluation, and group design. Framework snippets and full-stack architecture diagrams are teaching references; the only runnable application is the Gemini SDK starter.
+The day includes architecture, storage, containers, a typical app scaffold, ReAct, plan-and-execute, evaluator–optimizer, multi-agent orchestration, a Ralph loop reference, ADK/LangGraph/Deep Agents/CrewAI comparisons, skills, MCP, a 40-minute streaming/chat/artifact chapter, evaluation, and group design. Framework snippets and full-stack architecture diagrams are teaching references; the only runnable application is the Gemini SDK starter.

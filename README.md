@@ -31,7 +31,7 @@ This is tool calling: the model chooses whether a capability should be used, whi
 
 ## Files
 
-- `agentic-app-101.html` — workshop slide deck. Use left/right arrow keys; press `N` for speaker notes.
+- `agentic-app-101.html` — workshop slide deck. Use left/right arrow keys; `N` opens presenter notes, `O` opens the slide overview, and `F` toggles fullscreen. The illustrated deck works offline without external fonts or images.
 - `run_agent.py` — small Gemini tool-calling example.
 - `run.sh` / `run.bat` — install dependencies and start the program.
 - `facilitator-runbook.md` — suggested three-hour facilitation plan.

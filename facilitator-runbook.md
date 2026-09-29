@@ -9,10 +9,10 @@ Audience: people with mixed technical confidence. No participant installation or
 | 09:00–09:30 | Agent fundamentals | 1–6 | 30 |
 | 09:30–10:30 | Architecture and data | 7–14 | 60 |
 | 10:45–12:00 | Containers and project structure | 16–25 | 75 |
-| 13:00–14:15 | Frameworks, skills and MCP | 27–40 | 75 |
-| 14:30–15:30 | Walkthrough and reliability | 42–50 | 60 |
-| 15:30–16:30 | System design exercise | 51–55 | 60 |
-| 16:30–17:00 | Review and Q&A | 56–59 | 30 |
+| 13:00–14:15 | Agent patterns and frameworks | 27–45 | 75 |
+| 14:30–15:30 | Walkthrough and reliability | 47–55 | 60 |
+| 15:30–16:30 | System design exercise | 56–60 | 60 |
+| 16:30–17:00 | Review and Q&A | 61–64 | 30 |
 
 Breaks: 10:30–10:45 and 14:15–14:30. Lunch: 12:00–13:00. Total: 390 teaching/activity minutes + 90 break/lunch minutes = 480 minutes.
 
@@ -190,119 +190,159 @@ Point out that useful changes often cross boundaries. Folder structure helps own
 
 ### 27. Model, SDK, framework and runtime
 
-13:00–14:15 · Frameworks, skills and MCP · 5 minutes
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 Our runnable script uses the Google SDK and automatic function calling. It is not currently a Deep Agents app. These categories overlap in products; use them to explain responsibilities. The model choice and the framework choice are separate decisions.
 
-### 28. Frameworks: side-by-side comparison
+### 28. ReAct: reason, act, observe
 
-13:00–14:15 · Frameworks, skills and MCP · 9 minutes
+13:00–14:15 · Agent patterns and frameworks · 6 minutes
 
-Spend about two minutes on each column. These are overlapping approaches, not mutually exclusive capabilities. Match the app and team to the approach. None removes the need for authentication, data ownership, deployment or checks. Python Deep Agents is distinct from the community TypeScript deepagentsdk demo discussed earlier.
+ReAct interleaves reasoning, actions and observations. Trace the return arrow when the first search result is insufficient; take the answer branch when evidence is sufficient. The application executes the tool and enforces access. Explain the decision at a high level; do not imply that internal reasoning must be displayed. The existing Gemini SDK demo illustrates a tool-call exchange, but it does not implement the original ReAct prompting method. Connect this diagram to the agent component in the architecture slide.
+
+References: https://arxiv.org/abs/2210.03629
+
+### 29. Plan-and-execute
+
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
+
+Walk through the document assistant. Planning is useful when a task has several dependent steps. The short return path runs another step; the longer path revises the plan when evidence changes. A plan can be represented as a task list or structured state. Fixed steps can also be ordinary workflow code. This is a general pattern, not a claim that every framework supplies the same planner API. An execution step may itself use a ReAct-style loop.
+
+References: https://www.anthropic.com/engineering/building-effective-agents
+
+### 30. Evaluator–optimizer
+
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
+
+Apply this to a document briefing draft. A validator can check required fields, while a model or person can assess less mechanical criteria. Model evaluation is fallible, especially when generator and evaluator share blind spots. Use known examples to assess the evaluator. Set a revision limit and return unresolved issues when it is reached. Passing evaluation prepares a draft for review; it does not authorize publication.
+
+References: https://www.anthropic.com/engineering/building-effective-agents
+
+### 31. Multi-agent orchestration
+
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
+
+Replace the earlier brief orchestration slide with this concrete example. Explain sequence, routing and delegation verbally: sequence follows ordered steps, routing selects a specialist, delegation assigns work and combines results. Independent report summaries may run in parallel. Each worker may have its own tool loop. For three short reports, one agent may be sufficient; delegation adds coordination, model calls and failure cases. The synthesis step must preserve sources and handle missing worker results.
+
+References: https://www.anthropic.com/engineering/building-effective-agents
+
+### 32. Ralph loop: repeated agent runs
+
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
+
+Keep this as a reference example for building the document assistant, rather than the assistant’s normal document-processing flow. Geoffrey Huntley describes Ralph as a technique whose simplest form is a shell loop repeatedly invoking a coding agent. Files, specifications and the plan carry progress between runs. The diagram expands the work performed during an iteration; implementations vary. The original minimal loop does not provide a completion guarantee or automatic stop condition. A run may contain ReAct-style tool use. Use the controls on the next slide for a bounded implementation; do not demonstrate an unbounded shell loop.
+
+References: https://ghuntley.com/ralph/
+
+### 33. Completion criteria and execution limits
+
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
+
+Close the pattern section by asking where the stop decision belongs. Application code should enforce budgets and permissions. Model assertions of completion are not sufficient evidence. A run may finish with a partial result or a request for human input. Transition: an execution pattern describes the flow; a framework supplies tools for implementing it. Frameworks can support several patterns, and a single application can combine patterns. Revisit these controls in the capstone.
+
+### 34. Frameworks: side-by-side comparison
+
+13:00–14:15 · Agent patterns and frameworks · 7 minutes
+
+Allow about one minute per framework, then compare tradeoffs and take questions. These are overlapping approaches, not mutually exclusive capabilities. Match the app and team to the approach. None removes the need for authentication, data ownership, deployment or checks. Python Deep Agents is distinct from the community TypeScript deepagentsdk demo discussed earlier.
 
 References: https://google.github.io/adk-docs/; https://docs.langchain.com/oss/python/langgraph/overview; https://docs.langchain.com/oss/python/deepagents/overview; https://docs.crewai.com/en/introduction
 
-### 29. Framework selection
+### 35. Framework selection
 
-13:00–14:15 · Frameworks, skills and MCP · 5 minutes
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 These are facilitator recommendations, not exclusive product claims. A framework is useful when it reduces repeated work and improves control. Do not choose based only on a feature checklist or a popular name. Ask what people on the team can maintain.
 
-### 30. Where Deep Agents fits
+### 36. Where Deep Agents fits
 
-13:00–14:15 · Frameworks, skills and MCP · 5 minutes
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 Think of nested responsibilities, not five separate machines. Deep Agents builds on LangChain and uses LangGraph. Your app still owns identity and data access. Do not present the starter SDK script as using this stack.
 
 References: https://docs.langchain.com/oss/python/deepagents/overview
 
-### 31. Deep Agents capabilities
+### 37. Deep Agents capabilities
 
-13:00–14:15 · Frameworks, skills and MCP · 6 minutes
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 Version behavior matters. Explain capabilities conceptually rather than teaching all configuration options. A virtual filesystem can be backed by memory, disk or another store; it does not imply a secure execution sandbox. Inspect installed-version docs before adapting production code.
 
 References: https://docs.langchain.com/oss/python/deepagents/overview; https://docs.langchain.com/oss/python/deepagents/backends
 
-### 32. Deep Agents configuration
+### 38. Deep Agents configuration
 
-13:00–14:15 · Frameworks, skills and MCP · 6 minutes
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 This is deliberately a reading exercise, not copy-and-run code. Explain that Gemini can be configured through a compatible model integration. The actual runnable file stays run_agent.py and uses Google’s SDK.
 
 References: https://docs.langchain.com/oss/python/deepagents/quickstart
 
-### 33. Agent orchestration patterns
+### 39. Skills, tools and MCP
 
-13:00–14:15 · Frameworks, skills and MCP · 5 minutes
-
-Sequence follows an ordered path. Routing selects one path. Delegation assigns bounded work that returns a result. Parallel tasks can help when independent, but do not assume a group of agents improves correctness. Discuss one case where ordinary code is more predictable.
-
-### 34. Skills, tools and MCP
-
-13:00–14:15 · Frameworks, skills and MCP · 5 minutes
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 The skill is guidance, the tool is an operation, and MCP is an integration interface. They can work together. A skill may include scripts and resources, but the app still decides how those run. MCP does not itself make a data source trustworthy or provide unlimited access.
 
 References: https://agentskills.io/what-are-skills; https://modelcontextprotocol.io/docs/learn/architecture
 
-### 35. Agent Skills
+### 40. Agent Skills
 
-13:00–14:15 · Frameworks, skills and MCP · 5 minutes
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 Skills package task guidance and supporting assets. The host/framework decides how it discovers and loads them. Loading skill instructions does not grant new permissions or replace the model. Compatibility and supported behavior differ across hosts.
 
 References: https://agentskills.io/what-are-skills; https://docs.langchain.com/oss/python/deepagents/skills
 
-### 36. Model Context Protocol (MCP)
+### 41. Model Context Protocol (MCP)
 
-13:00–14:15 · Frameworks, skills and MCP · 6 minutes
+13:00–14:15 · Agent patterns and frameworks · 5 minutes
 
 MCP is the protocol, and the server is software implementing it. The server may run on the same computer or remotely. It can provide more than tools: resources supply context and prompts provide templates. Avoid teaching protocol mechanics here.
 
 References: https://modelcontextprotocol.io/docs/learn/architecture
 
-### 37. Example: skills and MCP tools
+### 42. Example: skills and MCP tools
 
-13:00–14:15 · Frameworks, skills and MCP · 4 minutes
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 An application can call an ordinary local function without MCP. MCP is useful for reusable connections across compatible clients. The document remains input data; embedded instructions in it should not override application policy. This is a design example, not an installed integration.
 
-### 38. Additional concepts
+### 43. Additional concepts
 
-13:00–14:15 · Frameworks, skills and MCP · 4 minutes
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 These terms describe needs or patterns, not things every beginner app must install. A container alone is not proof of safe untrusted-code execution. A log should avoid credentials and unnecessary personal data. Use the reference handout for links and definitions.
 
-### 39. Choose an approach
+### 44. Choose an approach
 
-13:00–14:15 · Frameworks, skills and MCP · 6 minutes
+13:00–14:15 · Agent patterns and frameworks · 4 minutes
 
 There is no unique correct framework. A reasonable answer might evaluate Deep Agents for long tasks, use a comparison-writing skill, and reuse an authorized document connector. ADK or a graph can also fit depending on the team. Assess the reasoning, not the logo.
 
-### 40. Framework selection criteria
+### 45. Framework selection criteria
 
-13:00–14:15 · Frameworks, skills and MCP · 4 minutes
+13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
 Close the framework discussion by asking which evidence would change the team’s mind. Small representative trials are more informative than a long feature list. Keep the chosen approach minimal and add integrations when they solve a real need.
 
-### 41. Afternoon break
+### 46. Afternoon break
 
 14:15–14:30 · 15 minutes. Resume on time; no setup tasks for participants.
 
-### 42. Tool calling
+### 47. Tool calling
 
 14:30–15:30 · Walkthrough and reliability · 6 minutes
 
 Python runs the lookup function after Gemini requests it. Google’s SDK handles the function-call exchange. The sample tool reads fixed data. It does not send email, modify files, or run shell commands. Tool use can require several model requests; do not describe it as necessarily one API request.
 
-### 43. Read the actual starter
+### 48. Read the actual starter
 
 14:30–15:30 · Walkthrough and reliability · 7 minutes
 
 Open the file on the presenter’s screen; do not ask attendees to type. Walk through it from top to bottom without explaining every Python token. The sample schedule is fictional and is not the timing plan for today. Tool matching is basic; use unknown-query behavior as a discussion point.
 
-### 44. Gemini API access
+### 49. Gemini API access
 
 14:30–15:30 · Walkthrough and reliability · 6 minutes
 
@@ -310,7 +350,7 @@ Presenter project: my-rd-coe-demo-gen-ai. In AI Studio, select or import that pr
 
 The model configured in .env must still be available. Check the key’s actual project tier before any API call. Free-tier access is not guaranteed for an existing billed project. Do not promise one request per answer because automatic function calling may involve several.
 
-### 45. Gemini tool-calling demo
+### 50. Gemini tool-calling demo
 
 14:30–15:30 · Walkthrough and reliability · 7 minutes
 
@@ -318,61 +358,61 @@ The output on this slide is illustrative; wording varies by model. run_agent.py 
 
 If a live API run has not been rehearsed, use the labelled example output and walk the code. The slide is not evidence that the API has been tested.
 
-### 46. Demo test cases
+### 51. Demo test cases
 
 14:30–15:30 · Walkthrough and reliability · 6 minutes
 
 Use fixed sample inputs. If the tool gives a bad match, explain the matching limitation rather than attributing everything to the model. Missing credentials, unavailable model and quota errors are environment cases. Never claim a successful run if only the transcript was shown.
 
-### 47. Tool permissions and approval
+### 52. Tool permissions and approval
 
 14:30–15:30 · Walkthrough and reliability · 7 minutes
 
 Use an email example: finding an address, drafting an email, and sending it are different actions. For writes, retries need duplicate prevention. Mention idempotency as an optional word meaning repeated requests do not repeat a side effect. The starter is read-only.
 
-### 48. Agent evaluation
+### 53. Agent evaluation
 
 14:30–15:30 · Walkthrough and reliability · 8 minutes
 
 Ask groups to propose one additional example. A small evaluation set can include known, unknown, ambiguous and malformed inputs. Record model/config changes and compare results. An answer sounding confident does not establish correctness.
 
-### 49. Model calls, latency and cost
+### 54. Model calls, latency and cost
 
 14:30–15:30 · Walkthrough and reliability · 7 minutes
 
 Use a hypothetical budget in model calls rather than unsupported prices: three model calls per request times fifty requests is 150 calls, before retries. Real billing often uses token counts and differs by provider/tool. Limit steps, set timeouts and monitor usage. Free tier means constrained allowance, not unlimited use.
 
-### 50. Production checklist
+### 55. Production checklist
 
 14:30–15:30 · Walkthrough and reliability · 6 minutes
 
-Use this to bridge the small starter and production diagram. These are app responsibilities regardless of framework. Do not imply the current starter implements this checklist or is ready for untrusted multi-user deployment.
+Refer back to completion criteria and execution limits from the patterns section. Use this to bridge the small starter and production diagram. These are app responsibilities regardless of framework. Do not imply the current starter implements this checklist or is ready for untrusted multi-user deployment.
 
-### 51. Capstone: a document briefing assistant
+### 56. Capstone: a document briefing assistant
 
 15:30–16:30 · System design exercise · 5 minutes
 
 Form groups of three or four. Give each group the exercise sheet. Assign roles such as user, app designer and reviewer. Keep a common use case so architecture choices are comparable across groups.
 
-### 52. Exercise: system architecture
+### 57. Exercise: system architecture
 
 15:30–16:30 · System design exercise · 25 minutes
 
 Suggested pacing: 5 minutes user/output, 8 minutes architecture/data, 7 minutes framework/integrations/permissions, 5 minutes failure path and pitch. Walk around and ask who may see a document, what survives refresh, and how they know a draft is supported. Use paper or a shared whiteboard; no laptop is necessary.
 
-### 53. Document assistant reference architecture
+### 58. Document assistant reference architecture
 
 15:30–16:30 · System design exercise · 10 minutes
 
 This is a proposed extension, not the behavior of run_agent.py. Explain that the review screen needs authorization tied to the draft version. A skill can carry the briefing format; an MCP server can expose document reads. Neither is mandatory for a first version.
 
-### 54. Share and compare
+### 59. Share and compare
 
 15:30–16:30 · System design exercise · 15 minutes
 
 Allow approximately 60 seconds per group plus 30 seconds feedback, adapting to group count. Compare decisions instead of ranking brands. If there are many groups, pair them and ask two groups to share with the room.
 
-### 55. Demo setup
+### 60. Demo setup
 
 15:30–16:30 · System design exercise · 5 minutes
 
@@ -380,25 +420,25 @@ No attendee needs to install or run anything during the session. The local repo 
 
 The Git repository is local. Supply the published URL if it is published later; otherwise distribute the folder through an approved channel. Explain that .env.example is copied and real keys remain private.
 
-### 56. Production considerations
+### 61. Production considerations
 
 16:30–17:00 · Review and Q&A · 5 minutes
 
 Connect this to a real customer-order assistant: it needs identity, authorization, durable records, and error handling. Keep it concrete. A retry is not always safe for a tool that sends or charges something; read-only lookup is a simpler first capability.
 
-### 57. Knowledge check
+### 62. Knowledge check
 
 16:30–17:00 · Review and Q&A · 10 minutes
 
 Suggested answers: object storage with access controls; no, models and frameworks are distinct choices; skill is reusable guidance while a tool is an executable capability; tools/resources/prompts through MCP; identity, authorization, validated inputs and any required human approval. Ask for explanations rather than exact terminology.
 
-### 58. Questions and next steps
+### 63. Questions and next steps
 
 16:30–17:00 · Review and Q&A · 10 minutes
 
 Reserve this time for questions. If an answer depends on a provider version or company policy, identify what to verify rather than guessing. Point to sources-and-frameworks.md and typical-app-scaffold.md. Advanced implementation details can be taken after the session.
 
-### 59. Summary
+### 64. Summary
 
 16:30–17:00 · Review and Q&A · 5 minutes
 

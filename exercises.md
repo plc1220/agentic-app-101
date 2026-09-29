@@ -31,11 +31,11 @@ Identify the application component responsible for each change:
 
 Choose from frontend, tool functions, data persistence and evaluation. Explain how related components interact.
 
-## D. Choose an approach — 6 minutes
+## D. Choose an approach — 4 minutes
 
 A team needs to read several reports and draft a comparison.
 
-- Which framework would you evaluate first, and why?
+- Which execution pattern and framework would you start with, and why?
 - Would a skill help maintain the same report format?
 - Would a direct function or an existing MCP connection help retrieve documents?
 - What evidence would make you change your choice?
@@ -53,7 +53,8 @@ Design a document briefing assistant for an operations colleague. It reads three
 | Where ownership and job status live | |
 | Where temporary work lives | |
 | Where final drafts live | |
-| Framework to evaluate and why | |
+| Execution pattern and framework | |
+| Completion criteria and execution limits | |
 | Optional skill | |
 | Optional MCP connection | |
 | Approval point | |

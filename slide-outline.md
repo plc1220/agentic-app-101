@@ -28,36 +28,41 @@
 | 24 | C | Exercise: application components | 10 |
 | 25 | C | Application components: suggested answers | 5 |
 | 26 | break | Lunch | 60 |
-| 27 | D | Model, SDK, framework and runtime | 5 |
-| 28 | D | Frameworks: side-by-side comparison | 9 |
-| 29 | D | Framework selection | 5 |
-| 30 | D | Where Deep Agents fits | 5 |
-| 31 | D | Deep Agents capabilities | 6 |
-| 32 | D | Deep Agents configuration | 6 |
-| 33 | D | Agent orchestration patterns | 5 |
-| 34 | D | Skills, tools and MCP | 5 |
-| 35 | D | Agent Skills | 5 |
-| 36 | D | Model Context Protocol (MCP) | 6 |
-| 37 | D | Example: skills and MCP tools | 4 |
-| 38 | D | Additional concepts | 4 |
-| 39 | D | Choose an approach | 6 |
-| 40 | D | Framework selection criteria | 4 |
-| 41 | break | Afternoon break | 15 |
-| 42 | E | Tool calling | 6 |
-| 43 | E | Read the actual starter | 7 |
-| 44 | E | Gemini API access | 6 |
-| 45 | E | Gemini tool-calling demo | 7 |
-| 46 | E | Demo test cases | 6 |
-| 47 | E | Tool permissions and approval | 7 |
-| 48 | E | Agent evaluation | 8 |
-| 49 | E | Model calls, latency and cost | 7 |
-| 50 | E | Production checklist | 6 |
-| 51 | F | Capstone: a document briefing assistant | 5 |
-| 52 | F | Exercise: system architecture | 25 |
-| 53 | F | Document assistant reference architecture | 10 |
-| 54 | F | Share and compare | 15 |
-| 55 | F | Demo setup | 5 |
-| 56 | G | Production considerations | 5 |
-| 57 | G | Knowledge check | 10 |
-| 58 | G | Questions and next steps | 10 |
-| 59 | G | Summary | 5 |
+| 27 | D | Model, SDK, framework and runtime | 4 |
+| 28 | D | ReAct: reason, act, observe | 6 |
+| 29 | D | Plan-and-execute | 4 |
+| 30 | D | Evaluator–optimizer | 4 |
+| 31 | D | Multi-agent orchestration | 4 |
+| 32 | D | Ralph loop: repeated agent runs | 4 |
+| 33 | D | Completion criteria and execution limits | 3 |
+| 34 | D | Frameworks: side-by-side comparison | 7 |
+| 35 | D | Framework selection | 3 |
+| 36 | D | Where Deep Agents fits | 3 |
+| 37 | D | Deep Agents capabilities | 4 |
+| 38 | D | Deep Agents configuration | 4 |
+| 39 | D | Skills, tools and MCP | 3 |
+| 40 | D | Agent Skills | 4 |
+| 41 | D | Model Context Protocol (MCP) | 5 |
+| 42 | D | Example: skills and MCP tools | 3 |
+| 43 | D | Additional concepts | 3 |
+| 44 | D | Choose an approach | 4 |
+| 45 | D | Framework selection criteria | 3 |
+| 46 | break | Afternoon break | 15 |
+| 47 | E | Tool calling | 6 |
+| 48 | E | Read the actual starter | 7 |
+| 49 | E | Gemini API access | 6 |
+| 50 | E | Gemini tool-calling demo | 7 |
+| 51 | E | Demo test cases | 6 |
+| 52 | E | Tool permissions and approval | 7 |
+| 53 | E | Agent evaluation | 8 |
+| 54 | E | Model calls, latency and cost | 7 |
+| 55 | E | Production checklist | 6 |
+| 56 | F | Capstone: a document briefing assistant | 5 |
+| 57 | F | Exercise: system architecture | 25 |
+| 58 | F | Document assistant reference architecture | 10 |
+| 59 | F | Share and compare | 15 |
+| 60 | F | Demo setup | 5 |
+| 61 | G | Production considerations | 5 |
+| 62 | G | Knowledge check | 10 |
+| 63 | G | Questions and next steps | 10 |
+| 64 | G | Summary | 5 |

@@ -27,8 +27,23 @@ Fit guidance reflects the workshop’s design judgment. Many use cases can be im
 | Memory | Information retained for future use, with an ownership and retention policy. |
 | Observability | Logs, traces and measurements that help explain a run. |
 
-## Official references
+## Execution patterns
 
+| Pattern | Main role |
+|---|---|
+| ReAct | Interleave reasoning, tool actions and observations within a run. |
+| Plan-and-execute | Define steps, execute them and revise the plan when needed. |
+| Evaluator–optimizer | Generate a result, evaluate against criteria and revise with feedback. |
+| Multi-agent orchestration | Assign bounded tasks and combine the results. |
+| Ralph loop | Repeatedly invoke a coding agent, retaining progress in files and task state. |
+
+Patterns can be combined. A Ralph outer loop may invoke an agent with an inner ReAct-style loop. Framework selection is a separate implementation decision. Set completion criteria and enforce execution limits in the application.
+
+## Source references
+
+- [ReAct paper](https://arxiv.org/abs/2210.03629)
+- [Agent workflow patterns](https://www.anthropic.com/engineering/building-effective-agents)
+- [Ralph: original description](https://ghuntley.com/ralph/)
 - [Google ADK](https://google.github.io/adk-docs/)
 - [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)
 - [Deep Agents](https://docs.langchain.com/oss/python/deepagents/overview)

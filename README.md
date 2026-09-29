@@ -58,4 +58,4 @@ LangChain's Python [`deepagents`](https://github.com/langchain-ai/deepagents) is
 
 The HTML is self-contained, with inline diagrams and presenter notes. Editable source is in `deck/build.py`, `deck/lesson_content.py`, and `deck/extra.css`. Run `python3 deck/build.py` to rebuild the HTML, slide outline, reference map, and facilitator runbook. The build checks that planned sessions and breaks add up to an eight-hour day.
 
-The day includes architecture, storage, containers, a typical app scaffold, ADK/LangGraph/Deep Agents/CrewAI comparisons, skills, MCP, evaluation, and group design. Framework snippets and full-stack architecture diagrams are teaching references; the only runnable application is the Gemini SDK starter.
+The day includes architecture, storage, containers, a typical app scaffold, ReAct, plan-and-execute, evaluator–optimizer, multi-agent orchestration, a Ralph loop reference, ADK/LangGraph/Deep Agents/CrewAI comparisons, skills, MCP, evaluation, and group design. Framework snippets and full-stack architecture diagrams are teaching references; the only runnable application is the Gemini SDK starter.

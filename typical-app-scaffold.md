@@ -1,6 +1,6 @@
-# A typical agentic app scaffold
+# Example agentic application project structure
 
-This is an illustrative folder map for discussion. The runnable example remains `run_agent.py`; the directories below are not a shipped full-stack implementation.
+Example directory structure. Directory names vary by project and framework. The runnable demo is `run_agent.py`.
 
 ```text
 agentic-app/

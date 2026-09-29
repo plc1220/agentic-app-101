@@ -1,4 +1,4 @@
-# Participant exercises — no coding required
+# Workshop exercises
 
 Use paper or a shared whiteboard. All data is fictional. The facilitator has suggested answers in the notes and the following slides.
 
@@ -20,16 +20,16 @@ Choose a database, object storage, file workspace or cache for:
 
 For each, explain whether it needs to survive a restart and who can read it.
 
-## C. Find the right folder — 10 minutes
+## C. Application components — 10 minutes
 
-Using the scaffold slide, decide where you would start for each change:
+Identify the application component responsible for each change:
 
 - Make a progress message clearer.
 - Add a customer order lookup.
 - Keep results after the process restarts.
 - Check that unknown questions do not receive invented answers.
 
-More than one folder can be involved. Explain the responsibility of each.
+Choose from frontend, tool functions, data persistence and evaluation. Explain how related components interact.
 
 ## D. Choose an approach — 6 minutes
 
@@ -47,7 +47,7 @@ Design a document briefing assistant for an operations colleague. It reads three
 | Design question | Your choice |
 |---|---|
 | User and useful output | |
-| Screen and API | |
+| Frontend and API | |
 | Agent and allowed tools | |
 | Where original files live | |
 | Where ownership and job status live | |

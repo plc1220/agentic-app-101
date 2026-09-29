@@ -28,74 +28,74 @@ def add(title, theme, body, note):
     slides.append(dict(title=title,theme=theme,body=body,note=note))
 add('Agentic App 101','cover',f'''
 <div class="cover-copy">{label('A practical introduction')}
-<h1>Agentic<br>App <em>101.</em></h1><p class="intro">A helpful AI.<br>A small toolbox.<br>A real application.</p>
-<div class="cover-bottom"><span class="small-dot"></span>Follow along today. Try it yourself later.</div></div>
+<h1>Agentic<br>App <em>101.</em></h1><p class="intro">Architecture.<br>Frameworks.<br>Implementation.</p>
+</div>
 <div class="cover-art" aria-label="A question reaches the AI, a tool looks up information, and an answer returns">
-<div class="art-grid"></div><div class="art-label">THE LITTLE LOOP THAT DOES THINGS</div>
+<div class="art-grid"></div><div class="art-label">AGENT TOOL-CALLING LOOP</div>
 <div class="art-question">{icon('chat')}<span>“When is the session?”</span></div>
-<div class="connector c1"></div><div class="agent-tile"><div class="eyes"><i></i><i></i></div><div class="agent-smile"></div><span>AI helper</span></div>
-<div class="connector c2"></div><div class="tool-tile">{icon('tool')}<strong>Look it up</strong><small>One approved tool</small></div>
+<div class="connector c1"></div><div class="agent-tile"><div class="eyes"><i></i><i></i></div><div class="agent-smile"></div><span>Agent</span></div>
+<div class="connector c2"></div><div class="tool-tile">{icon('tool')}<strong>Tool call</strong><small>One approved tool</small></div>
 <div class="art-answer">{icon('check')}<span>“It starts at 9:30.”</span></div><div class="art-caption">ASK <span>→</span> USE A TOOL <span>→</span> ANSWER</div></div>''',
 'Welcome the group. No installation or coding is required during the workshop. The downloadable starter lets participants revisit the idea afterwards. We will use a fictional workshop schedule throughout.')
-add('An assistant with a toolbox','',f'''
-{eyebrow('01','The idea')}<h2>An assistant<br>with a <em>toolbox.</em></h2>
+add('Agents and tools','',f'''
+{eyebrow('01','The idea')}<h2>Agents and <em>tools</em></h2>
 <div class="split story"><div class="story-copy"><p class="lead">The AI can ask a tool for information before it answers.</p><ol class="plain-steps"><li><span>01</span>You ask a question.</li><li><span>02</span>A tool checks the facts.</li><li><span>03</span>The AI explains the result.</li></ol></div>
 <div class="chat-demo"><div class="mock-header"><span class="avatar">W</span>Workshop helper<span class="sample-label">ILLUSTRATION</span></div><div class="bubble user">When is the backend session?</div><div class="tool-event">{icon('tool')}<div><strong>Checking the schedule</strong><small>Workshop lookup tool</small></div><span class="done">✓</span></div><div class="bubble assistant">The backend session starts at <strong>9:30 AM.</strong></div></div></div>
 <div class="takeaway"><span>Remember</span>The application chooses which tools the AI can use.</div>''',
 'Explain that the schedule comes from a lookup function. The model is not expected to invent the time. This is an illustration, not a live API response. Ask the audience what other small lookup tasks they do regularly.')
-add('The app around the AI','',f'''
-{eyebrow('02','The whole picture')}<h2>The AI is one part<br>of the <em>application.</em></h2><p class="lead narrow">Four pieces work together to turn a question into a useful answer.</p>
+add('Application components','',f'''
+{eyebrow('02','Application architecture')}<h2>Application <em>components</em></h2><p class="lead narrow">Frontend → backend → agent → tools</p>
 <div class="architecture">
-<div class="arch-item"><span class="arch-icon cream">{icon('screen')}</span><span class="arch-number">01 / SCREEN</span><h3>Where you ask</h3><p>A chat box or web page.</p></div><span class="arch-arrow">→</span>
-<div class="arch-item"><span class="arch-icon blue">{icon('app')}</span><span class="arch-number">02 / APP</span><h3>What connects it</h3><p>Passes the question along.</p></div><span class="arch-arrow">→</span>
-<div class="arch-item"><span class="arch-icon coral">{icon('spark')}</span><span class="arch-number">03 / AI</span><h3>What decides</h3><p>Chooses a useful tool.</p></div><span class="arch-arrow">↔</span>
-<div class="arch-item"><span class="arch-icon green">{icon('tool')}</span><span class="arch-number">04 / TOOL</span><h3>What does a job</h3><p>Looks up the schedule.</p></div></div>
-<div class="takeaway"><span>Behind the scenes</span>Ordinary software still connects the parts and handles the data.</div>''',
+<div class="arch-item"><span class="arch-icon cream">{icon('screen')}</span><span class="arch-number">01 / FRONTEND</span><h3>User interface</h3><p>A chat box or web page.</p></div><span class="arch-arrow">→</span>
+<div class="arch-item"><span class="arch-icon blue">{icon('app')}</span><span class="arch-number">02 / BACKEND</span><h3>Application API</h3><p>Validates and routes requests.</p></div><span class="arch-arrow">→</span>
+<div class="arch-item"><span class="arch-icon coral">{icon('spark')}</span><span class="arch-number">03 / AGENT</span><h3>Agent logic</h3><p>Chooses a useful tool.</p></div><span class="arch-arrow">↔</span>
+<div class="arch-item"><span class="arch-icon green">{icon('tool')}</span><span class="arch-number">04 / TOOL</span><h3>Tool function</h3><p>Looks up the schedule.</p></div></div>
+<div class="takeaway"><span>Backend</span>Handles requests, authorization, tool execution and data access.</div>''',
 'Use plain language before technical names. The screen is the frontend; the application services are the backend. The take-home script uses a terminal as its screen. A web app can provide a chat interface around the same idea.')
-add('Four homes for data','',f'''
-{eyebrow('03','Backend basics')}<h2>Different data.<br><em>Different homes.</em></h2>
+add('Backend storage','',f'''
+{eyebrow('03','Backend basics')}<h2>Backend <em>storage</em></h2>
 <div class="storage-grid">
-<article class="storage"><div class="storage-icon green">{icon('db')}</div><div><span class="label">DATABASE</span><h3>A tidy record book</h3><p>People, orders, job status.</p></div></article>
-<article class="storage"><div class="storage-icon blue">{icon('box')}</div><div><span class="label">OBJECT STORAGE</span><h3>A cupboard for big files</h3><p>Photos, PDFs, finished reports.</p></div></article>
-<article class="storage"><div class="storage-icon cream">{icon('folder')}</div><div><span class="label">FILE STORAGE</span><h3>Folders on a work desk</h3><p>Files arranged by name and path.</p></div></article>
-<article class="storage"><div class="storage-icon coral">{icon('bolt')}</div><div><span class="label">CACHE</span><h3>A quick-access sticky note</h3><p>Useful information kept briefly.</p></div></article></div>
+<article class="storage"><div class="storage-icon green">{icon('db')}</div><div><span class="label">DATABASE</span><h3>Structured records</h3><p>People, orders, job status.</p></div></article>
+<article class="storage"><div class="storage-icon blue">{icon('box')}</div><div><span class="label">OBJECT STORAGE</span><h3>Objects and metadata</h3><p>Photos, PDFs, finished reports.</p></div></article>
+<article class="storage"><div class="storage-icon cream">{icon('folder')}</div><div><span class="label">FILE STORAGE</span><h3>Files and directories</h3><p>Files arranged by name and path.</p></div></article>
+<article class="storage"><div class="storage-icon coral">{icon('bolt')}</div><div><span class="label">CACHE</span><h3>Cached data</h3><p>Useful information kept briefly.</p></div></article></div>
 <div class="takeaway"><span>Ask first</span>Does it need to be kept? Who should be able to see it?</div>''',
 'A database holds structured records. Object storage holds blobs addressed by an object key. File storage exposes named files and folders; it can be durable, while an agent workspace may be temporary. A cache improves speed and can expire. Keep these distinctions clear without requiring the audience to know particular cloud products.')
-add('Package the app','',f'''
-{eyebrow('04','Containerization')}<h2>Pack the app.<br><em>Bring its ingredients.</em></h2>
-<div class="split container-layout"><div class="package-scene"><div class="package-tag">ONE REPEATABLE PACKAGE</div><div class="package"><div class="package-lid">{icon('box')}<span>APP KIT</span></div><div class="package-content"><span>{icon('app')}Your code</span><span>{icon('tool')}Required libraries</span><span>{icon('play')}Runtime</span></div></div><div class="package-base">Ready to run in a consistent environment</div></div>
-<div class="definition-list"><div><span class="def-no">01</span><section><h3>Image</h3><p>The packaged app and its ingredients.</p></section></div><div><span class="def-no">02</span><section><h3>Container</h3><p>A running instance of that package.</p></section></div><div><span class="def-no">03</span><section><h3>Persistent storage</h3><p>A place for data that needs to stay.</p></section></div></div></div>
-<div class="takeaway"><span>For today</span>Our small take-home example runs directly with Python.</div>''',
+add('Containerization','',f'''
+{eyebrow('04','Containerization')}<h2>Container <em>images</em></h2>
+<div class="split container-layout"><div class="package-scene"><div class="package-tag">CONTAINER IMAGE</div><div class="package"><div class="package-lid">{icon('box')}<span>APPLICATION IMAGE</span></div><div class="package-content"><span>{icon('app')}Your code</span><span>{icon('tool')}Required libraries</span><span>{icon('play')}Runtime</span></div></div><div class="package-base">Ready to run in a consistent environment</div></div>
+<div class="definition-list"><div><span class="def-no">01</span><section><h3>Image</h3><p>Application code, dependencies and runtime.</p></section></div><div><span class="def-no">02</span><section><h3>Container</h3><p>A running instance of an image.</p></section></div><div><span class="def-no">03</span><section><h3>Persistent storage</h3><p>Volumes or external storage for durable data.</p></section></div></div></div>
+''',
 'The packing analogy introduces consistent environments. Explain that containers can be replaced, so data that must survive needs a mounted volume or external store. The starter does not require Docker. This slide teaches the concept without adding installation work.')
-add('The model asks, the app acts','dark',f'''
-{eyebrow('05','Tool calling')}<h2>The model asks.<br><em>The app acts.</em></h2><p class="lead">A tool is a small, specific job the application allows.</p>
+add('Tool calling','dark',f'''
+{eyebrow('05','Tool calling')}<h2>Tool <em>calling</em></h2><p class="lead">A tool is a small, specific job the application allows.</p>
 <div class="tool-flow"><div class="flow-cell"><div class="flow-top"><span>1</span>REQUEST</div>{icon('chat')}<h3>“Check the<br>backend session.”</h3></div><div class="flow-link">→</div><div class="flow-cell featured"><div class="flow-top"><span>2</span>LOOKUP TOOL</div>{icon('tool')}<h3>Read the<br>sample schedule.</h3></div><div class="flow-link">→</div><div class="flow-cell"><div class="flow-top"><span>3</span>RESULT</div>{icon('check')}<h3>“It starts<br>at 9:30 AM.”</h3></div></div>
 <div class="dark-foot">One bounded capability: reading a fixed workshop schedule.</div>''',
 'Python runs the lookup function after Gemini requests it. Google’s SDK handles the function-call exchange. The sample tool reads fixed data. It does not send email, modify files, or run shell commands. Tool use can require several model requests; do not describe it as necessarily one API request.')
-add('Meet the workshop helper','',f'''
-{eyebrow('06','The take-home example')}<h2>A little script.<br><em>A visible tool call.</em></h2>
+add('Gemini tool-calling demo','',f'''
+{eyebrow('06','The take-home example')}<h2>Gemini tool-calling<br><em>demo</em></h2>
 <div class="split demo-layout"><div class="terminal"><div class="terminal-bar"><div class="traffic"><i></i><i></i><i></i></div><span>workshop-helper</span><span>EXAMPLE OUTPUT</span></div><div class="terminal-body"><span class="terminal-muted">Agentic App 101 helper</span><br><br><span class="terminal-green">You:</span> When is the backend session?<br><br><span class="terminal-amber">[The agent used its workshop<br> lookup tool: backend]</span><br><br><span class="terminal-green">Agent:</span> The backend session<br>starts at 9:30 AM.<br><br><span class="terminal-muted">You:</span> <span class="cursor"></span></div></div>
 <div class="demo-explainer"><div class="big-one">1<span>tool</span></div><h3>Find a workshop session</h3><p>Gemini understands the question.<br>Python looks up the information.</p><div class="mini-rule"></div><p class="small">Uses Google’s Gen AI SDK.<br>Each question starts a fresh request.</p></div></div>
 <div class="takeaway"><span>Watch for</span>The printed tool message shows when the lookup happens.</div>''',
 'The output on this slide is illustrative; wording varies by model. run_agent.py is a small Gemini tool-calling example, not a Deep Agents implementation. The original Deep Agents repos remain optional reading. Be clear that this program does not persist a conversation or implement a web frontend.')
-add('Start with Gemini','',f'''
-{eyebrow('07','API access')}<h2>Gemini gives us<br>a place to <em>start.</em></h2>
+add('Gemini API access','',f'''
+{eyebrow('07','API access')}<h2>Gemini <em>API access</em></h2>
 <div class="split access-layout"><div class="api-pass"><span class="pass-top">GOOGLE AI STUDIO</span><div class="key-graphic">{icon('key')}</div><h3>Your own API key</h3><p>The credential your script uses<br>to call Gemini.</p><div class="pass-bottom">KEEP IT IN YOUR LOCAL .env FILE</div></div>
 <div class="access-copy"><h3>A free tier for selected models</h3><p>Useful for a small learning example.<br>Model availability and quotas can change.</p><div class="mini-rule"></div><h3>Use fictional sample questions</h3><p>Free-tier content may be used to improve Google products.</p><a class="text-link" href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noreferrer">Check current pricing & limits <span>↗</span></a></div></div>''',
 'Presenter project: my-rd-coe-demo-gen-ai. In AI Studio, select or import that project if you have access. A key inherits its project’s billing tier; an existing billed project is not necessarily on the free tier. A project ID alone is not a credential. The script uses the Developer API key, not Vertex AI. Refer to the linked current pricing/billing pages rather than quoting fixed quotas.')
-add('Try it after the workshop','',f'''
-{eyebrow('08','After the workshop')}<h2>Take it home.<br><em>Try it at your own pace.</em></h2><p class="lead narrow">The repository includes instructions and launch scripts.</p>
+add('Demo setup','',f'''
+{eyebrow('08','After the workshop')}<h2>Demo <em>setup</em></h2><p class="lead narrow">The repository includes instructions and launch scripts.</p>
 <div class="setup-steps"><article><span class="step-number">01</span><h3>Get ready</h3><p>Download the repo.<br>Install Python 3.10+.</p></article><article><span class="step-number">02</span><h3>Get a key</h3><p>Create your own key<br>in Google AI Studio.</p></article><article><span class="step-number">03</span><h3>Save it locally</h3><p>Copy <code>.env.example</code><br>to <code>.env</code>. Add the key.</p></article><article><span class="step-number">04</span><h3>Start the helper</h3><p>Windows: <code>run.bat</code><br>Mac/Linux: <code>./run.sh</code></p></article></div>
 <div class="takeaway"><span>Start here</span>Ask: “When is the backend session?” &nbsp; Type “quit” to finish.</div>''',
 'No attendee needs to install or run anything during the session. The local repo has not yet been published to a remote host; supply the eventual download link separately. The launch scripts install packages on the first run, so internet access is required. Keep .env private; Git ignores it.')
-add('As the app grows','',f'''
-{eyebrow('09','Looking ahead')}<h2>More capability.<br><em>More decisions.</em></h2>
-<div class="growth-panels"><article><span class="growth-icon green">{icon('shield')}</span><h3>Protect</h3><p>Who is allowed<br>to do what?</p><small>Give tools only the access they need.</small></article><article><span class="growth-icon blue">{icon('db')}</span><h3>Remember</h3><p>What should<br>be saved?</p><small>Choose a home and a lifetime for data.</small></article><article><span class="growth-icon cream">{icon('refresh')}</span><h3>Recover</h3><p>What happens<br>when it fails?</p><small>Handle timeouts, errors, and retries.</small></article></div>
+add('Production considerations','',f'''
+{eyebrow('09','Looking ahead')}<h2>Production <em>considerations</em></h2>
+<div class="growth-panels"><article><span class="growth-icon green">{icon('shield')}</span><h3>Authorization</h3><p>Who is allowed<br>to do what?</p><small>Give tools only the access they need.</small></article><article><span class="growth-icon blue">{icon('db')}</span><h3>Data persistence</h3><p>What should<br>be saved?</p><small>Choose storage and retention policies.</small></article><article><span class="growth-icon cream">{icon('refresh')}</span><h3>Error handling</h3><p>What happens<br>when it fails?</p><small>Handle timeouts, errors, and retries.</small></article></div>
 <div class="takeaway"><span>Build gradually</span>Start with one helpful task. Add capabilities as you need them.</div>''',
 'Connect this to a real customer-order assistant: it needs identity, authorization, durable records, and error handling. Keep it concrete. A retry is not always safe for a tool that sends or charges something; read-only lookup is a simpler first capability.')
-add('Your first agent starts small','closing',f'''
-{eyebrow('10','Your next step')}<h2>Your first agent<br>starts <em>small.</em></h2>
-<div class="closing-list"><div><span>01</span><strong>One useful tool.</strong><p>A clear job with a clear boundary.</p></div><div><span>02</span><strong>A home for the data.</strong><p>Decide what to keep and where.</p></div><div><span>03</span><strong>People in control.</strong><p>The app defines what the AI can do.</p></div></div>
+add('Summary','closing',f'''
+{eyebrow('10','Summary')}<h2>Agentic applications:<br><em>summary</em></h2>
+<div class="closing-list"><div><span>01</span><strong>Tools.</strong><p>Functions with defined inputs and outputs.</p></div><div><span>02</span><strong>Storage.</strong><p>Database, object storage, file storage and cache.</p></div><div><span>03</span><strong>Authorization.</strong><p>The application enforces access and approval.</p></div></div>
 <div class="closing-bottom"><a href="README.md" class="readme-link">{icon('file')}Open the take-home guide <span>↗</span></a><span>Questions & conversation</span></div>''',
 'Invite questions. Recap using the schedule example: one lookup function, fixed sample data, and application-controlled access. The guide is README.md in the same folder. The deck and starter work from local files; no external fonts or images are needed.')
 from lesson_content import expand
@@ -133,7 +133,7 @@ page=f'''<!doctype html>
 <div class="portrait-hint">Tip: turn your device sideways for a larger view.</div><main id="viewport" aria-label="Workshop presentation"><div id="stage">{sections}</div></main>
 <footer class="footer"><div class="progress" aria-hidden="true"><span id="bar"></span></div><div class="footer-left"><span class="counter" id="counter"></span><span id="slide-title"></span></div><div class="dots" id="dots" aria-label="Slide navigation"></div><div class="footer-tools"><button type="button" id="overview-button" title="Slide overview (O)">Slides <span class="nav-key">O</span></button><button type="button" id="notes-button" aria-pressed="false" aria-controls="notes-panel" title="Presenter notes (N)">Notes <span class="nav-key">N</span></button><button class="fullscreen-btn" type="button" id="fullscreen-button" title="Fullscreen (F)" aria-label="Fullscreen">⛶</button><button id="prev" type="button" title="Previous slide (left arrow)" aria-label="Previous slide">←</button><button id="next" type="button" class="next" title="Next slide (right arrow)">Next →</button></div></footer>
 <aside class="notes-panel" id="notes-panel" hidden aria-label="Presenter notes"><div class="panel-head"><strong>Presenter notes</strong><button class="close" id="close-notes" aria-label="Close notes">×</button></div><p id="note-text"></p></aside>
-<dialog class="overview" id="overview" aria-labelledby="overview-title"><div class="overview-head"><h2 id="overview-title">The workshop at a glance</h2><button class="close" id="close-overview" aria-label="Close slide overview">×</button></div><div class="overview-filters"><input id="slide-search" type="search" aria-label="Find a slide" placeholder="Find a slide…"><select id="chapter-select" aria-label="Filter by module"><option value="">All modules</option><option value="A">A · The idea</option><option value="B">B · Architecture and data</option><option value="C">C · Containers and scaffold</option><option value="D">D · Frameworks, skills and MCP</option><option value="E">E · Demo and reliability</option><option value="F">F · Group design</option><option value="G">G · Review</option><option value="break">Breaks</option></select></div><div class="overview-grid" id="overview-grid"></div></dialog>
+<dialog class="overview" id="overview" aria-labelledby="overview-title"><div class="overview-head"><h2 id="overview-title">Slide overview</h2><button class="close" id="close-overview" aria-label="Close slide overview">×</button></div><div class="overview-filters"><input id="slide-search" type="search" aria-label="Find a slide" placeholder="Find a slide…"><select id="chapter-select" aria-label="Filter by module"><option value="">All modules</option><option value="A">A · Agent fundamentals</option><option value="B">B · Architecture and data</option><option value="C">C · Containers and scaffold</option><option value="D">D · Frameworks, skills and MCP</option><option value="E">E · Demo and reliability</option><option value="F">F · System design exercise</option><option value="G">G · Review</option><option value="break">Breaks</option></select></div><div class="overview-grid" id="overview-grid"></div></dialog>
 <div class="sr-only" id="announcement" aria-live="polite"></div><script>{js}</script></body></html>'''
 (root/'agentic-app-101.html').write_text(page)
 print(f'Built {len(slides)} slides from deck/build.py and deck/lesson_content.py')

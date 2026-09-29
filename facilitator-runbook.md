@@ -61,7 +61,7 @@ Ask the group to classify a receipt email and a research assistant. Explain that
 
 Explain that the answer is grounded in a document-read function. The model is expected to use the reported figures. This is an illustration, not a live API response. Ask the audience what other small lookup tasks they do regularly.
 
-Show the question first. Ask “where should the answer come from?” Then discuss why an approved schedule lookup beats relying on model knowledge for a changing timetable.
+Show the question first. Ask “where should the answer come from?” Then discuss why reading the source reports is necessary before comparing their figures.
 
 ### 6. Exercise: define a use case
 
@@ -105,7 +105,7 @@ Use a fictional invoice. The database row references the object; it need not con
 
 09:30–10:30 · Architecture and data · 7 minutes
 
-Explain retrieval with a handbook. Embeddings are numeric representations that can help find similar text; they are one search option. Keyword or database search can be enough for a small corpus. Retrieval does not retrain the model and does not guarantee a correct answer. Check permissions before supplying excerpts.
+Follow the three scenes: find a source, put relevant excerpts into the model context, then generate an answer. Explain retrieval with a handbook. Embeddings are numeric representations that can help find similar text; they are one search option. Keyword or database search can be enough for a small corpus. Retrieval does not guarantee a correct answer. Check permissions before supplying excerpts. The source link lets the person check the evidence.
 
 ### 13. Exercise: select storage
 
@@ -133,7 +133,7 @@ Explain why a provider API key should not be shipped in browser JavaScript. The 
 
 10:45–12:00 · Containers and project structure · 6 minutes
 
-The packing analogy introduces consistent environments. Explain that containers can be replaced, so data that must survive needs a mounted volume or external store. The starter does not require Docker. This slide teaches the concept without adding installation work.
+Use the packing scene to introduce an image, then distinguish it from a running container. In the last scene, the application container is replaceable while the database and files remain outside it. The illustration is an analogy; the runtime executes code, not a robot. Docker Compose on the next slide shows the actual service connections. The default tutorial launcher does not require Docker.
 
 ### 18. Docker Compose architecture
 
@@ -289,7 +289,7 @@ References: https://docs.langchain.com/oss/python/deepagents/quickstart
 
 13:00–14:15 · Agent patterns and frameworks · 3 minutes
 
-The skill is guidance, the tool is an operation, and MCP is an integration interface. They can work together. A skill may include scripts and resources, but the app still decides how those run. MCP does not itself make a data source trustworthy or provide unlimited access.
+Read these as three complementary concepts, not a required sequence. The booklet represents guidance, the document lookup is an operation, and the connected service represents an MCP server. A skill may include scripts and resources, but the app still decides how those run. MCP does not itself make a data source trustworthy or grant permission. The next slides show the actual skill structure and MCP architecture.
 
 References: https://agentskills.io/what-are-skills; https://modelcontextprotocol.io/docs/learn/architecture
 

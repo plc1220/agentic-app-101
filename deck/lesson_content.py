@@ -289,7 +289,7 @@ def write_supporting_materials(root, slides):
         '- Open the HTML deck and use O for the overview, N for presenter notes, and arrow keys to navigate.',
         '- Read backend/agent.py and the three fictional reports in sample-documents/.',
         '- If using a live API demo, rehearse on the presenting machine with an available model and the project’s actual quota. A transcript is an acceptable fallback; label it as illustrative.',
-        '- Keep API credentials private. Live Gemini execution and Docker integration have not been tested during this implementation.',
+        '- Keep API credentials private. Live Gemini chat, tools, skill loading, report preview/download and saved-chat recovery were verified on macOS on 2026-09-30. Windows launch and Docker integration remain unverified.',
         '- Provide paper or a shared whiteboard. Use exercises.md for participant prompts.',
         '- Tutorial repository: https://github.com/plc1220/agentic-app-101',
         '- The web app uses React, FastAPI, Deep Agents and Gemini. ADK, LangGraph and CrewAI are comparison material. Optional Compose services match the container diagram.', '',

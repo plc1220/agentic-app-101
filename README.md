@@ -150,6 +150,6 @@ To serve the slides separately: `python3 -m http.server 8765 --bind 127.0.0.1`, 
 - The last 24 stored messages are supplied as bounded conversation context; this is not unlimited memory or durable recovery of a half-executed LangGraph checkpoint.
 - Generated Markdown renders without raw HTML. Uploaded files and model output are untrusted content.
 - MCP and advanced multi-agent orchestration remain workshop reference topics; no MCP server is needed to run this app.
-- Frontend builds were produced during implementation. Live Gemini calls, launcher tests and Docker integration tests were not run as part of this change.
+- Verified on macOS on 2026-09-30: Python server startup, live Gemini comparison and follow-up, Deep Agents tools and skill loading, streamed answers, report preview/download, and conversation recovery after refresh. The labeled sample workflow also completed. Windows launch and Docker integration remain unverified.
 
 Keep `.env`, `.data`, and API keys out of Git. See the MIT [license](LICENSE).

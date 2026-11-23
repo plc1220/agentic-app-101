@@ -40,6 +40,12 @@ The launcher creates `.venv`, installs the Python packages, and starts the backe
 
 If `.env` is absent, the launcher creates it and stops so you can add the key. If an older workshop `.venv` uses Python 3.10, move that environment aside and rerun with Python 3.11+.
 
+### PCAI DeepSeek in OpenCode on Windows
+
+For attendees using PCAI DeepSeek as their OpenCode coding assistant, [download the Windows setup ZIP](downloads/PCAI_DeepSeek_Windows_AutoSetup.zip?raw=1). Extract it, double-click **Setup PCAI.cmd**, and paste your own PCAI API token. Setup creates an **OpenCode PCAI** desktop shortcut with the endpoint, model, and certificate already configured. No configuration files need editing.
+
+Use the OpenCode Desktop v1 build supplied by IT and connect to the PCAI VPN first. The ZIP contains the public CA certificate but no API token or private key. See the [setup instructions and validation scope](setup/pcai-windows/README.md). This configures OpenCode separately from the workshop demo application's Gemini settings.
+
 ### Offline walkthrough
 
 Set `AGENT_MODE=sample` and restart. This mode uses the same UI, tools, storage, streams and artifacts with **scripted responses and no model calls**. It is visibly labelled Sample and is useful for demonstrating the app when API access is unavailable. The first package installation still needs internet access.
